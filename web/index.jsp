@@ -1,8 +1,8 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 
-<sql:query var="peopleQuery" dataSource="jdbc/blogData">
-    SELECT ID, name FROM people
+<sql:query var="postQuery" dataSource="jdbc/blogData">
+    SELECT pID, pTitle FROM posts
 </sql:query>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -17,14 +17,14 @@
 
     <body>
         <h1>
-            a blog
+            a blog website
         </h1>
 
         <form action="response.jsp">
-            Select a name:
-            <select name="name_id">
-                <c:forEach var="row" items="${peopleQuery.rows}">
-                    <option value="${row.ID}">${row.name}</option>
+            Select a post:
+            <select name="title_id">
+                <c:forEach var="row" items="${postQuery.rows}">
+                    <option value="${row.pID}">${row.pTitle}</option>
                 </c:forEach>
             </select>
             <input type="submit" value="submit" name="submit" />
