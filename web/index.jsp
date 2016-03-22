@@ -22,7 +22,7 @@
 
         <form action="response.jsp">
             Select a post:
-            <select name="title_id">
+            <select name="title_id" size="4">
                 <c:forEach var="row" items="${postQuery.rows}">
                     <option value="${row.pID}">${row.pTitle}</option>
                 </c:forEach>
