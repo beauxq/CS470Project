@@ -3,7 +3,7 @@
 
 
 <sql:query var="postQuery" dataSource="jdbc/blogData">
-    SELECT * FROM 
+    SELECT pID, pTitle, aName, pDate FROM
     (posts JOIN authors
     ON posts.aID = authors.aID)
     ORDER BY pDate DESC
@@ -24,16 +24,12 @@
         <h1>
             a blog website
         </h1>
-
-        <form action="response.jsp">
-            Latest posts:<br />
-            <select name="title_id" size="4">
-                <c:forEach var="row" items="${postQuery.rows}">
-                    <option value="${row.pID}">${row.pTitle} by ${row.aName} ${row.pDate}</option>
-                </c:forEach>
-            </select>
-            <input type="submit" value="submit" name="submit" />
-        </form>
+        
+        Latest posts:<br />
+        <c:forEach var="row" items="${postQuery.rows}">
+            <a href="response.jsp?pID=${row.pID}">${row.pTitle} by ${row.aName} ${row.pDate}</a>
+            <br /><br />
+        </c:forEach>
 
     </body>
 
