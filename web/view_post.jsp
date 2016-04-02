@@ -18,17 +18,24 @@
 </sql:query>
 
 <sql:query var="commentCountQuery" dataSource="jdbc/blogData">
-    SELECT COUNT(cID) as numComments FROM
+    SELECT COUNT(cID) AS numComments FROM
         authors JOIN (
             SELECT * FROM comments
             WHERE comments.pID = ? <sql:param value="${param.pID}"/>
         ) AS postcomments
         ON authors.aID = postcomments.aID
 </sql:query>
+        
+<sql:query var="tagsQuery" dataSource="jdbc/blogData">
+    SELECT tText FROM posttags JOIN tags
+    ON posttags.tID = tags.tID
+    WHERE posttags.pID = ? <sql:param value="${param.pID}"/>
+</sql:query>
 
 <c:set var="postDetails" value="${postQuery.rows[0]}"/>
 <c:set var="comments" value="${commentsQuery.rows}"/>
 <c:set var="commentsCount" value="${commentCountQuery.rows[0]}"/>
+<c:set var="tags" value="${tagsQuery.rows}"/>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -47,7 +54,10 @@
         <br />${postDetails.pText}<br />
         <br />
         
-         ${commentsCount.numComments} comments on ${postDetails.pTitle}<br />
+        Tags:<c:forEach var="row" items="${tags}"> ${row.tText}</c:forEach><br />
+        <br />
+        
+        ${commentsCount.numComments} comments on ${postDetails.pTitle}<br />
         <c:forEach var="row" items="${comments}">
             <br />
             ${row.cText}
