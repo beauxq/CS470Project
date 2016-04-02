@@ -22,12 +22,15 @@
 
     <body>
         <h1>
-            a blog website
+            Home
         </h1>
         
-        Latest posts:<br />
+        <h2>
+            Latest posts:<br />
+        </h2>
         <c:forEach var="row" items="${postQuery.rows}">
-            <a href="response.jsp?pID=${row.pID}">${row.pTitle} by ${row.aName} ${row.pDate}</a>
+            <a href="view_post.jsp?pID=${row.pID}">${row.pTitle}</a> 
+            <br>By ${row.aName} on ${row.pDate}
             <br /><br />
         </c:forEach>
 
