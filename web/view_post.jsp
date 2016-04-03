@@ -49,6 +49,7 @@
     </head>
 
     <body>
+        <a href="index.jsp">Home</a><br><br>
         Title: ${postDetails.pTitle}<br />
         Author: ${postDetails.aName}<br />
         Date: ${postDetails.pDate}<br />
@@ -71,7 +72,7 @@
             <input type="hidden" name="pID" value="${param.pID}">
             Your comment:<br>
             <input type="text" name="cText" required><br>
-            Your name<br>
+            Your name:<br>
             <input type="text" name="aName" required>
             <input type="submit" value="Add Comment">
         </form>

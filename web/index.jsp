@@ -25,9 +25,8 @@
             Home
         </h1>
         
-        <h2>
-            Latest posts:<br />
-        </h2>
+        <a href="new_post.jsp">New Post</a><br/><br/>
+        
         <c:forEach var="row" items="${postQuery.rows}">
             <a href="view_post.jsp?pID=${row.pID}">${row.pTitle}</a> 
             <br>By ${row.aName} on ${row.pDate}
