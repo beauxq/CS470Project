@@ -15,6 +15,7 @@
         ) AS postcomments
         ON authors.aID = postcomments.aID
     )
+    ORDER BY cDate ASC
 </sql:query>
 
 <sql:query var="commentCountQuery" dataSource="jdbc/blogData">
@@ -64,7 +65,17 @@
             <br />
             By ${row.aName} on ${row.cDate}
             <br />
-        </c:forEach>
+        </c:forEach><br />
+            
+        <form method="get" action="add_comment">
+            <input type="hidden" name="pID" value="${param.pID}">
+            Your comment:<br>
+            <input type="text" name="cText" required><br>
+            Your name<br>
+            <input type="text" name="aName" required>
+            <input type="submit" value="Add Comment">
+        </form>
+                
     </body>
 
 </html>
