@@ -51,7 +51,7 @@
     <body>
         <a href="index.jsp">Home</a><br><br>
         Title: ${postDetails.pTitle}<br />
-        Author: ${postDetails.aName}<br />
+        Author: <a href="index.jsp?aName=${postDetails.aName}">${postDetails.aName}</a><br />
         Date: ${postDetails.pDate}<br />
         <br />${postDetails.pText}<br />
         <br />
