@@ -53,7 +53,12 @@
             </c:otherwise>
         </c:choose>
         
-        <a href="new_post.jsp">New Post</a><br/><br/>
+        <a href="new_post.jsp">New Post</a>
+        <form action="index.jsp">
+            <input type="text" name="search">
+            <input type="submit" value="Search">
+        </form>
+        <br/><br/>
         
         <c:forEach var="row" items="${postQuery.rows}">
             <a href="view_post.jsp?pID=${row.pID}">${row.pTitle}</a> 
