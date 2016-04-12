@@ -25,7 +25,7 @@
                                 <sql:query var="postQuery" dataSource="jdbc/blogData">
                                     SELECT pID, pTitle, aName, pDate FROM
                                     (posts JOIN authors
-                                    ON posts.aID = authors.aID)
+                                    ON posts.aID = authors.aID)                                  
                                     ORDER BY pDate DESC
                                     LIMIT 20
                                 </sql:query>
@@ -60,6 +60,7 @@
                     SELECT pID, pTitle, aName, pDate FROM
                     (posts JOIN authors
                     ON posts.aID = authors.aID)
+                    WHERE pTitle LIKE '%${param.search}%'
                     ORDER BY pDate DESC
                     LIMIT 20
                 </sql:query>
@@ -109,10 +110,10 @@
         <br /><br />
         <form action="index.jsp">
             <input type="text" name="search">
-            Title:<input type="checkbox" name="title" id="title" onclick="titleClick()">
-            Content:<input type="checkbox" name="content" id="content" onclick="contentClick()" disabled>
-            Tags:<input type="checkbox" name="tags" id="tags" onclick="tagsClick()" disabled>
-            Authors:<input type="checkbox" name="author" id="author" disabled>
+            <input type="checkbox" name="title" id="title" onclick="titleClick()">Title  
+            <input type="checkbox" name="content" id="content" onclick="contentClick()" disabled>Content  
+            <input type="checkbox" name="tags" id="tags" onclick="tagsClick()" disabled>Tags  
+            <input type="checkbox" name="author" id="author" disabled>Authors
             <input type="submit" value="Search">
         </form>
         <!--
