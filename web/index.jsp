@@ -14,6 +14,58 @@
             LIMIT 20
         </sql:query>
     </c:when>
+    <c:when test="${not empty param.title}">
+        <c:choose>
+            <c:when test="${not empty param.content}">
+                <c:choose>
+                    <c:when test="${not empty param.tags}">
+                        <c:choose>
+                            <c:when test="${not empty param.author}">
+                                <!-- TODO: all 4 query here -->
+                                <sql:query var="postQuery" dataSource="jdbc/blogData">
+                                    SELECT pID, pTitle, aName, pDate FROM
+                                    (posts JOIN authors
+                                    ON posts.aID = authors.aID)
+                                    ORDER BY pDate DESC
+                                    LIMIT 20
+                                </sql:query>
+                            </c:when>
+                            <c:otherwise>
+                                <!-- TODO: title content tags query here -->
+                                <sql:query var="postQuery" dataSource="jdbc/blogData">
+                                    SELECT pID, pTitle, aName, pDate FROM
+                                    (posts JOIN authors
+                                    ON posts.aID = authors.aID)
+                                    ORDER BY pDate DESC
+                                    LIMIT 20
+                                </sql:query>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:when>
+                    <c:otherwise>
+                        <!-- TODO: title content query here -->
+                        <sql:query var="postQuery" dataSource="jdbc/blogData">
+                            SELECT pID, pTitle, aName, pDate FROM
+                            (posts JOIN authors
+                            ON posts.aID = authors.aID)
+                            ORDER BY pDate DESC
+                            LIMIT 20
+                        </sql:query>
+                    </c:otherwise>
+                </c:choose>
+            </c:when>
+            <c:otherwise>
+                <!-- TODO: title query here -->
+                <sql:query var="postQuery" dataSource="jdbc/blogData">
+                    SELECT pID, pTitle, aName, pDate FROM
+                    (posts JOIN authors
+                    ON posts.aID = authors.aID)
+                    ORDER BY pDate DESC
+                    LIMIT 20
+                </sql:query>
+            </c:otherwise>
+        </c:choose>
+    </c:when>
     <c:otherwise>
         <sql:query var="postQuery" dataSource="jdbc/blogData">
             SELECT pID, pTitle, aName, pDate FROM
@@ -54,10 +106,29 @@
         </c:choose>
         
         <a href="new_post.jsp">New Post</a>
+        <br /><br />
         <form action="index.jsp">
             <input type="text" name="search">
+            Title:<input type="checkbox" name="title" id="title" onclick="titleClick()">
+            Content:<input type="checkbox" name="content" id="content" onclick="contentClick()" disabled>
+            Tags:<input type="checkbox" name="tags" id="tags" onclick="tagsClick()" disabled>
+            Authors:<input type="checkbox" name="author" id="author" disabled>
             <input type="submit" value="Search">
         </form>
+        <!--
+        <form action="index.jsp">
+            <input type="text" name="searchTitleContent">
+            <input type="submit" value="Search Titles and Content">
+        </form>
+        <form action="index.jsp">
+            <input type="text" name="searchTitleTagsContent">
+            <input type="submit" value="Search Titles, Tags, and Content">
+        </form>
+        <form action="index.jsp">
+            <input type="text" name="searchTitleTagsAuthorContent">
+            <input type="submit" value="Search Titles, Tags, Authors, and Content">
+        </form>
+        -->
         <br/><br/>
         
         <c:forEach var="row" items="${postQuery.rows}">
@@ -65,7 +136,8 @@
             <br>By <a href="index.jsp?aName=${row.aName}">${row.aName}</a> on ${row.pDate}
             <br /><br />
         </c:forEach>
-
+            
+        <script src="index.js"></script>
     </body>
 
 </html>
