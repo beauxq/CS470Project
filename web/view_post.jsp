@@ -46,13 +46,13 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>${postDetails.pTitle}</title>
+        <h1>${postDetails.pTitle}</h1>
+        <a href="index.jsp">Home</a><br><br>
     </head>
 
     <body>
-        <a href="index.jsp">Home</a><br><br>
-        Title: ${postDetails.pTitle}<br />
-        Author: <a href="index.jsp?aName=${postDetails.aName}">${postDetails.aName}</a><br />
-        Date: ${postDetails.pDate}<br />
+        By: <a href="posts_by_author.jsp?aName=${postDetails.aName}">${postDetails.aName}</a><br />
+        On: ${postDetails.pDate}<br />
         <br />${postDetails.pText}<br />
         <br />
         
