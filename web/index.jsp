@@ -21,21 +21,32 @@
                     <c:when test="${not empty param.tags}">
                         <c:choose>
                             <c:when test="${not empty param.author}">
-                                <!-- TODO: all 4 query here -->
+                                <!-- title content tags author query -->
                                 <sql:query var="postQuery" dataSource="jdbc/blogData">
-                                    SELECT pID, pTitle, aName, pDate FROM
-                                    (posts JOIN authors
-                                    ON posts.aID = authors.aID)                                  
+                                    SELECT DISTINCT posts.pID, pTitle, aName, pDate FROM
+                                    (posts 
+                                    JOIN authors ON posts.aID = authors.aID
+                                    JOIN posttags ON posts.pID = postTags.pID
+                                    JOIN tags ON postTags.tID = tags.tID)
+                                    WHERE pTitle LIKE '%${param.search}%'
+                                    OR pText LIKE '%${param.search}%'
+                                    OR tText LIKE '%${param.search}%'   
+                                    OR aName LIKE '%${param.search}%'
                                     ORDER BY pDate DESC
                                     LIMIT 20
                                 </sql:query>
                             </c:when>
                             <c:otherwise>
-                                <!-- TODO: title content tags query here -->
+                                <!-- title content tags query -->
                                 <sql:query var="postQuery" dataSource="jdbc/blogData">
-                                    SELECT pID, pTitle, aName, pDate FROM
-                                    (posts JOIN authors
-                                    ON posts.aID = authors.aID)
+                                    SELECT DISTINCT posts.pID, pTitle, aName, pDate FROM
+                                    (posts 
+                                    JOIN authors ON posts.aID = authors.aID
+                                    JOIN posttags ON posts.pID = postTags.pID
+                                    JOIN tags ON postTags.tID = tags.tID)
+                                    WHERE pTitle LIKE '%${param.search}%'
+                                    OR pText LIKE '%${param.search}%'
+                                    OR tText LIKE '%${param.search}%'
                                     ORDER BY pDate DESC
                                     LIMIT 20
                                 </sql:query>
@@ -43,11 +54,13 @@
                         </c:choose>
                     </c:when>
                     <c:otherwise>
-                        <!-- TODO: title content query here -->
+                        <!-- title content query  -->
                         <sql:query var="postQuery" dataSource="jdbc/blogData">
-                            SELECT pID, pTitle, aName, pDate FROM
+                            SELECT DISTINCT pID, pTitle, aName, pDate FROM
                             (posts JOIN authors
                             ON posts.aID = authors.aID)
+                            WHERE pTitle LIKE '%${param.search}%'
+                            OR pText LIKE '%${param.search}%'
                             ORDER BY pDate DESC
                             LIMIT 20
                         </sql:query>
@@ -55,9 +68,9 @@
                 </c:choose>
             </c:when>
             <c:otherwise>
-                <!-- TODO: title query here -->
+                <!-- title query -->
                 <sql:query var="postQuery" dataSource="jdbc/blogData">
-                    SELECT pID, pTitle, aName, pDate FROM
+                    SELECT DISTINCT pID, pTitle, aName, pDate FROM
                     (posts JOIN authors
                     ON posts.aID = authors.aID)
                     WHERE pTitle LIKE '%${param.search}%'
