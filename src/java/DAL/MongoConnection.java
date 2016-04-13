@@ -76,4 +76,15 @@ public class MongoConnection
     {
      return null;   
     }
+    
+    public void AddPost(String pTitle, String pText, String pDate, 
+            String aName, String[] tags)
+    {
+        
+    }
+    
+    public void AddComment(String pID, String cText, String cDate, String aName) 
+    {
+        
+    }
 }

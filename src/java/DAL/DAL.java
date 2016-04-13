@@ -54,5 +54,33 @@ public class DAL
             return ((MongoConnection) connection).GetRecentPosts();
         }
     }
+    
+    public void AddPost(String pTitle, String pText, String pDate, 
+            String aName, String[] tags) throws SQLException
+    {
+        if (usingSQL)
+        {
+            ((SQLConnection) connection).AddPost
+                    (pTitle, pText, pDate, aName, tags);
+        }
+        else
+        {
+            ((MongoConnection) connection).AddPost
+                    (pTitle, pText, pDate, aName, tags);
+        }
+    }
+    
+    public void AddComment(String pID, String cText, String cDate, String aName) 
+            throws SQLException
+    {
+        if (usingSQL)
+        {
+            ((SQLConnection) connection).AddComment(pID, cText, cDate, aName);
+        }
+        else
+        {
+            ((MongoConnection) connection).AddComment(pID, cText, cDate, aName);
+        }
+    }
 }
 

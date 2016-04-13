@@ -94,6 +94,32 @@ public class SQLConnection
         }
         return posts;
     }
+    
+    public void AddPost(String pTitle, String pText, String pDate, 
+            String aName, String[] tags) throws SQLException
+    {
+        int pID = nextID("pid", "posts");
+        int aID = getAuthorID(aName);
+        stmt.execute("INSERT INTO posts VALUES (" + pID + ", '" + pTitle 
+                + "', '" + pText + "', '" + pDate + "', " + aID + ")");
+
+        for (String tag : tags)
+        {
+            int tID = getTagID(tag);
+            stmt.execute("INSERT INTO posttags VALUES (" 
+                    + pID + ", " + tID + ")");
+        }
+    }
+    
+    public void AddComment(String pID, String cText, String cDate, String aName) 
+            throws SQLException
+    {
+            int cID = nextID("cid", "comments");
+            int aID = getAuthorID(aName);
+ 
+            stmt.execute("INSERT INTO comments VALUES (" + cID + ", '" + cText + 
+                    "', " + pID + ", '" + cDate + "', " + aID + ")");
+    }       
 
     private static int nextID(String id, String tablename) throws SQLException
     {
@@ -105,5 +131,39 @@ public class SQLConnection
 
         rs.next();
         return rs.getInt(1) + 1;
+    }
+    
+    private static int getAuthorID(String aName) throws SQLException
+    {
+        int aID = -1;
+        ResultSet rs = stmt.executeQuery
+                ("Select aID from authors where aName = '" + aName + "'");
+        if (rs.next()) // author already in db
+        {
+            aID = rs.getInt(1);
+        }
+        else // add author to db
+        {
+            aID = nextID("aid", "authors");
+            stmt.execute("Insert into authors values (" + aID + ", '" 
+                    + aName + "', 'password')");
+        }
+        return aID;
+    }
+    
+    private static int getTagID(String tText) throws SQLException
+    {
+        int tID = -1;
+        ResultSet rs = stmt.executeQuery("Select tID from tags where tText = '" + tText + "'");
+        if (rs.next()) // tag already in db
+        {
+            tID = rs.getInt(1);
+        }
+        else // add tag to db
+        {
+            tID = nextID("tid", "tags");
+            stmt.execute("Insert into tags values (" + tID + ", '" + tText + "')");
+        }
+        return tID;
     }
 }
