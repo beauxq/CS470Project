@@ -71,28 +71,28 @@ public class SQLConnection
     
     public List<Post> GetRecentPosts() throws SQLException
     {
-    	List<Post> posts = new ArrayList<Post>();
-        String sqlCmd = 
+    	String sqlCmd = 
                 "SELECT pID, pTitle, aName, pDate "
                 + "FROM (posts "
                 + "JOIN authors ON posts.aID = authors.aID) "
                 + "ORDER BY pDate DESC "
                 + "LIMIT 20";
-        
-        ResultSet rs = stmt.executeQuery(sqlCmd);
-
-        boolean more = rs.next();
-        while (more)
-        {
-            Post p = new Post();
-            p.pID = rs.getString(1);
-            p.pTitle = rs.getString(2);
-            p.aName = rs.getString(3);
-            p.pDate = rs.getString(4);
-            posts.add(p);
-            more = rs.next();
-        }
-        return posts;
+        return getPostsWithoutContent(sqlCmd);
+    }
+    
+    public List<Post> GetPostsByAuthor(String aName) throws SQLException
+    {
+        String sqlCmd =
+                "SELECT pId, pTitle, pDate, aName FROM "
+                + "(posts "
+                + "JOIN "
+                    + "(SELECT aName, aId FROM authors "
+                    + "WHERE aName = '" + aName + "') "
+                    + "AS inputAuthor "
+                + "ON posts.aID = inputAuthor.aID) "
+                + "ORDER BY pDate DESC "
+                + "LIMIT 20";
+        return getPostsWithoutContent(sqlCmd);
     }
     
     public void AddPost(String pTitle, String pText, String pDate, 
@@ -119,7 +119,25 @@ public class SQLConnection
  
             stmt.execute("INSERT INTO comments VALUES (" + cID + ", '" + cText + 
                     "', " + pID + ", '" + cDate + "', " + aID + ")");
-    }       
+    }  
+    
+    private static List<Post> getPostsWithoutContent(String sqlCmd) throws SQLException
+    {
+        List<Post> posts = new ArrayList<>();
+        ResultSet rs = stmt.executeQuery(sqlCmd);
+        boolean more = rs.next();
+        while (more)
+        {
+            Post p = new Post();
+            p.pID = rs.getString(1);
+            p.pTitle = rs.getString(2);
+            p.aName = rs.getString(3);
+            p.pDate = rs.getString(4);
+            posts.add(p);
+            more = rs.next();
+        }
+        return posts;
+    }
 
     private static int nextID(String id, String tablename) throws SQLException
     {

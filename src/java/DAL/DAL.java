@@ -55,6 +55,18 @@ public class DAL
         }
     }
     
+    public List<Post> GetPostsByAuthor(String aName) throws SQLException
+    {
+        if (usingSQL)
+        {
+            return ((SQLConnection) connection).GetPostsByAuthor(aName);
+        }
+        else
+        {
+            return ((MongoConnection) connection).GetPostsByAuthor(aName);
+        }
+    }
+    
     public void AddPost(String pTitle, String pText, String pDate, 
             String aName, String[] tags) throws SQLException
     {

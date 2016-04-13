@@ -77,6 +77,11 @@ public class MongoConnection
      return null;   
     }
     
+    public List<Post> GetPostsByAuthor(String aName)
+    {
+     return null;   
+    }
+    
     public void AddPost(String pTitle, String pText, String pDate, 
             String aName, String[] tags)
     {
