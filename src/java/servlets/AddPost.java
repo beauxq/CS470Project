@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public class AddPost extends HttpServlet
 {
-    static String connectionString = "jdbc:mysql://72.129.239.46:3306/470blog?zeroDateTimeBehavior=convertToNull";
+    static String connectionString = "jdbc:mysql://72.129.239.46:3306/470blog";
     static String userID = "cs470";
     static String password = "cs470lnw";
     static String databaseName = "470blog";
