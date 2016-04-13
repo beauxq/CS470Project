@@ -6,6 +6,7 @@ var title = document.getElementById("title");
 var content = document.getElementById("content");
 var tags = document.getElementById("tags");
 var author = document.getElementById("author");
+var searchbutton = document.getElementById("searchbutton");
 
 function titleClick()
 {
@@ -15,6 +16,7 @@ function titleClick()
         contentClick();
     }
     content.disabled = !(title.checked);
+    searchbutton.disabled = content.disabled;
 }
 
 function contentClick()
