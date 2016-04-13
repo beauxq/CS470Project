@@ -17,6 +17,7 @@ public class AddPost extends HttpServlet
     static String databaseName = "470blog";
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
+            
     {
         try
         {
@@ -26,12 +27,12 @@ public class AddPost extends HttpServlet
             stmt = con.createStatement();
             stmt.execute("USE " + databaseName);
             
-            int pID = Util.nextID(stmt, "pid", "posts");
+            int pID = SQLUtil.nextID(stmt, "pid", "posts");
             String pTitle = request.getParameter("pTitle");
             String pText = request.getParameter("pText");
-            String pDate = Util.getCurrentDate();            
+            String pDate = SQLUtil.getCurrentDate();            
             String aName = request.getParameter("aName");
-            int aID = Util.getAuthorID(stmt, aName);
+            int aID = SQLUtil.getAuthorID(stmt, aName);
             String[] tags = request.getParameter("tags").split(" ");
             
             stmt.execute("INSERT INTO posts VALUES (" + pID + ", '" + pTitle + "', '" +
@@ -39,10 +40,9 @@ public class AddPost extends HttpServlet
             
             for (String tag : tags)
             {
-                int tID = Util.getTagID(stmt, tag);
+                int tID = SQLUtil.getTagID(stmt, tag);
                 stmt.execute("INSERT INTO posttags VALUES (" + pID + ", " + tID + ")");
             }
-            
             response.sendRedirect("view_post.jsp?pID=" + pID);
         }
         catch (Exception ex)

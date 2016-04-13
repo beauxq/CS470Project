@@ -27,12 +27,12 @@ public class AddComment extends HttpServlet
             stmt = con.createStatement();
             stmt.execute("USE " + databaseName);
 
-            int cID = Util.nextID(stmt, "cid", "comments");
+            int cID = SQLUtil.nextID(stmt, "cid", "comments");
             String cText = request.getParameter("cText");
             String pID = request.getParameter("pID");
-            String cDate = Util.getCurrentDate();
+            String cDate = SQLUtil.getCurrentDate();
             String aName = request.getParameter("aName");
-            int aID = Util.getAuthorID(stmt, aName);
+            int aID = SQLUtil.getAuthorID(stmt, aName);
  
             stmt.execute("INSERT INTO comments VALUES (" + cID + ", '" + cText + 
                     "', " + pID + ", '" + cDate + "', " + aID + ")");

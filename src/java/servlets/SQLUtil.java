@@ -7,16 +7,16 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Util
+public class SQLUtil
 {
     public static int nextID(Statement stmt, String id, String tablename) throws SQLException
     {
-            ResultSet rs;
-            String selectMaxID = "select max(" + id + ") from " + tablename;
-            rs = stmt.executeQuery(selectMaxID); // get largest id so far
+        ResultSet rs;
+        String selectMaxID = "select max(" + id + ") from " + tablename;
+        rs = stmt.executeQuery(selectMaxID); // get largest id so far
 
-            rs.next();
-            return rs.getInt(1) + 1;
+        rs.next();
+        return rs.getInt(1) + 1;
     }
     
     public static int getAuthorID(Statement stmt, String aName) throws SQLException
