@@ -1,6 +1,3 @@
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -12,7 +9,7 @@
     </head>
 
     <body>
-             <form action="search_results.jsp">
+        <form action="search_results.jsp">
             <input type="text" name="search">
             <input type="checkbox" name="title" id="title" onclick="titleClick()">Title  
             <input type="checkbox" name="content" id="content" onclick="contentClick()" disabled>Content  

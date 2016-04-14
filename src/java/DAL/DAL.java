@@ -1,24 +1,23 @@
 package DAL;
 
 import DataObjects.Post;
-import java.sql.SQLException;
 import java.util.List;
 
 public class DAL
 {
     private static Boolean usingSQL = true;
-    private static Object connection;
+    private static IConnection connection;
     private static DAL singleton = null;
 
     private DAL()
     {
         if (usingSQL)
         {
-            connection = SQLConnection.GetSQLConnection();
+            connection = new SQLConnection();
         }
         else
         {
-            connection = MongoConnection.GetMongoConnection();
+            connection = new MongoConnection();
         }
     }
 
@@ -33,66 +32,33 @@ public class DAL
 
     public void CloseConnection()
     {
-        if (usingSQL)
-        {
-            ((SQLConnection) connection).Close();
-        }
-        else
-        {
-            ((MongoConnection) connection).Close();
-        }
+        connection.Close();
     }
     
-    public List<Post> GetRecentPosts() throws SQLException
+    public List<Post> GetRecentPosts()
     {
-        if (usingSQL)
-        {
-            return ((SQLConnection) connection).GetRecentPosts();
-        }
-        else
-        {
-            return ((MongoConnection) connection).GetRecentPosts();
-        }
+        return connection.GetRecentPosts();
     }
     
-    public List<Post> GetPostsByAuthor(String aName) throws SQLException
+    public List<Post> GetPostsByAuthor(String aName)
     {
-        if (usingSQL)
-        {
-            return ((SQLConnection) connection).GetPostsByAuthor(aName);
-        }
-        else
-        {
-            return ((MongoConnection) connection).GetPostsByAuthor(aName);
-        }
+        return connection.GetPostsByAuthor(aName);
+    }
+    
+    public List<Post> Search(String byTitle, String byContent, 
+            String byTags, String byAuthor, String searchTerm)
+    {
+        return connection.Search(byTitle, byContent, byTags, byAuthor, searchTerm);
     }
     
     public void AddPost(String pTitle, String pText, String pDate, 
-            String aName, String[] tags) throws SQLException
+            String aName, String[] tags)
     {
-        if (usingSQL)
-        {
-            ((SQLConnection) connection).AddPost
-                    (pTitle, pText, pDate, aName, tags);
-        }
-        else
-        {
-            ((MongoConnection) connection).AddPost
-                    (pTitle, pText, pDate, aName, tags);
-        }
+        connection.AddPost(pTitle, pText, pDate, aName, tags);
     }
     
     public void AddComment(String pID, String cText, String cDate, String aName) 
-            throws SQLException
     {
-        if (usingSQL)
-        {
-            ((SQLConnection) connection).AddComment(pID, cText, cDate, aName);
-        }
-        else
-        {
-            ((MongoConnection) connection).AddComment(pID, cText, cDate, aName);
-        }
+        connection.AddComment(pID, cText, cDate, aName);
     }
 }
-

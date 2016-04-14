@@ -9,7 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SQLConnection
+public class SQLConnection implements IConnection
 {
     private static String ipAddress = "72.129.239.46";
     private static String port = "3306";
@@ -19,11 +19,10 @@ public class SQLConnection
     private static String connectionString =
             "jdbc:mysql://" + ipAddress + ":" + port + "/" + databaseName;
 
-    private static SQLConnection singleton = null;
     private static Statement stmt;
     private static Connection con;
 
-    private SQLConnection()
+    SQLConnection()
     {
         try
         {
@@ -43,15 +42,6 @@ public class SQLConnection
         }
     }
 
-    public static SQLConnection GetSQLConnection()
-    {
-        if (singleton == null)
-        {
-            singleton = new SQLConnection();
-        }
-        return singleton;
-    }
-
     public void Close()
     {
         try
@@ -60,7 +50,6 @@ public class SQLConnection
             stmt.close();
             con.close();
             System.out.println("Closed mySQL connection");
-            singleton = null;
         }
         catch (Exception ex)
         {
@@ -69,56 +58,120 @@ public class SQLConnection
         }
     }
     
-    public List<Post> GetRecentPosts() throws SQLException
+    public List<Post> GetRecentPosts()
     {
-    	String sqlCmd = 
-                "SELECT pID, pTitle, aName, pDate "
-                + "FROM (posts "
-                + "JOIN authors ON posts.aID = authors.aID) "
-                + "ORDER BY pDate DESC "
-                + "LIMIT 20";
-        return getPostsWithoutContent(sqlCmd);
+        List<Post> posts = new ArrayList();
+        try
+        {
+            String sqlCmd =
+                    "SELECT pID, pTitle, aName, pDate "
+                    + "FROM (posts "
+                    + "JOIN authors ON posts.aID = authors.aID) "
+                    + "ORDER BY pDate DESC "
+                    + "LIMIT 20";
+            posts = getPostsWithoutContent(sqlCmd);
+        }
+        catch (SQLException ex)
+        {
+            System.out.println(ex.getMessage());
+        }
+        return posts;
     }
     
-    public List<Post> GetPostsByAuthor(String aName) throws SQLException
+    public List<Post> GetPostsByAuthor(String aName)
     {
-        String sqlCmd =
-                "SELECT pId, pTitle, pDate, aName FROM "
-                + "(posts "
-                + "JOIN "
-                    + "(SELECT aName, aId FROM authors "
-                    + "WHERE aName = '" + aName + "') "
-                    + "AS inputAuthor "
-                + "ON posts.aID = inputAuthor.aID) "
-                + "ORDER BY pDate DESC "
-                + "LIMIT 20";
-        return getPostsWithoutContent(sqlCmd);
+        List<Post> posts = new ArrayList();
+        try
+        {
+            String sqlCmd =
+                    "SELECT pId, pTitle, aName, pDate FROM "
+                    + "(posts "
+                    + "JOIN "
+                        + "(SELECT aName, aId FROM authors "
+                        + "WHERE aName = '" + aName + "') "
+                        + "AS inputAuthor "
+                    + "ON posts.aID = inputAuthor.aID) "
+                    + "ORDER BY pDate DESC "
+                    + "LIMIT 20";
+            posts = getPostsWithoutContent(sqlCmd);
+        }
+        catch (SQLException ex)
+        {
+            System.out.println(ex.getMessage());
+        }
+        return posts;
+    }
+    
+    public List<Post> Search(String byTitle, String byContent, 
+            String byTags, String byAuthor, String searchTerm)
+    {
+        List<Post> posts = new ArrayList();
+        String sqlCmd = "";
+
+        if (byAuthor != null)
+        {
+            sqlCmd = searchByTitleContentTagsAuthor(searchTerm);
+        }
+        else if (byTags != null)
+        {
+            sqlCmd = searchByTitleContentTags(searchTerm);
+        }
+        else if (byContent != null)
+        {
+            sqlCmd = searchByTitleContent(searchTerm);
+        }
+        else
+        {
+            sqlCmd = searchByTitle(searchTerm);
+        }
+        try
+        {
+            posts = getPostsWithoutContent(sqlCmd);
+        }
+        catch (SQLException ex)
+        {
+            System.out.println(ex.getMessage());
+        }
+        return posts;
     }
     
     public void AddPost(String pTitle, String pText, String pDate, 
-            String aName, String[] tags) throws SQLException
+            String aName, String[] tags)
     {
-        int pID = nextID("pid", "posts");
-        int aID = getAuthorID(aName);
-        stmt.execute("INSERT INTO posts VALUES (" + pID + ", '" + pTitle 
-                + "', '" + pText + "', '" + pDate + "', " + aID + ")");
-
-        for (String tag : tags)
+        try
         {
-            int tID = getTagID(tag);
-            stmt.execute("INSERT INTO posttags VALUES (" 
-                    + pID + ", " + tID + ")");
+            int pID = nextID("pid", "posts");
+            int aID = getAuthorID(aName);
+            stmt.execute("INSERT INTO posts VALUES (" + pID + ", '" + pTitle 
+                    + "', '" + pText + "', '" + pDate + "', " + aID + ")");
+
+            for (String tag : tags)
+            {
+                int tID = getTagID(tag);
+                stmt.execute("INSERT INTO posttags VALUES (" 
+                        + pID + ", " + tID + ")");
+            }
+        }
+        catch (SQLException ex)
+        {
+            System.out.println(ex.getMessage());
         }
     }
     
     public void AddComment(String pID, String cText, String cDate, String aName) 
-            throws SQLException
     {
+        try
+        {
             int cID = nextID("cid", "comments");
             int aID = getAuthorID(aName);
  
             stmt.execute("INSERT INTO comments VALUES (" + cID + ", '" + cText + 
                     "', " + pID + ", '" + cDate + "', " + aID + ")");
+        }
+        catch (SQLException ex)
+        {
+            System.out.println(ex.getMessage());
+        }
     }  
     
     private static List<Post> getPostsWithoutContent(String sqlCmd) throws SQLException
@@ -183,5 +236,55 @@ public class SQLConnection
             stmt.execute("Insert into tags values (" + tID + ", '" + tText + "')");
         }
         return tID;
+    }
+    
+    private static String searchByTitleContentTagsAuthor(String searchTerm)
+    {
+        return "SELECT DISTINCT posts.pID, pTitle, aName, pDate FROM " +
+            "(posts " +
+            "JOIN authors ON posts.aID = authors.aID " +
+            "JOIN posttags ON posts.pID = postTags.pID " +
+            "JOIN tags ON postTags.tID = tags.tID) " +
+            "WHERE pTitle LIKE '%" + searchTerm + "%' " +
+            "OR pText LIKE '%" + searchTerm + "%' " +
+            "OR tText LIKE '%" + searchTerm + "%' " +
+            "OR aName LIKE '%" + searchTerm + "%' " +
+            "ORDER BY pDate DESC " +
+            "LIMIT 20";
+    }
+    
+    private static String searchByTitleContentTags(String searchTerm)
+    {
+        return "SELECT DISTINCT posts.pID, pTitle, aName, pDate FROM " +
+            "(posts " +
+            "JOIN authors ON posts.aID = authors.aID " +
+            "JOIN posttags ON posts.pID = postTags.pID " +
+            "JOIN tags ON postTags.tID = tags.tID) " +
+            "WHERE pTitle LIKE '%" + searchTerm + "%' " +
+            "OR pText LIKE '%" + searchTerm + "%' " +
+            "OR tText LIKE '%" + searchTerm + "%' " +
+            "ORDER BY pDate DESC " +
+            "LIMIT 20";
+    }
+    
+    private static String searchByTitleContent(String searchTerm)
+    {
+        return "SELECT DISTINCT pID, pTitle, aName, pDate FROM " +
+            "(posts " +
+            "JOIN authors ON posts.aID = authors.aID) " +
+            "WHERE pTitle LIKE '%" + searchTerm + "%' " +
+            "OR pText LIKE '%" + searchTerm + "%' " +
+            "ORDER BY pDate DESC " +
+            "LIMIT 20";
+    }
+    
+    private static String searchByTitle(String searchTerm)
+    {
+        return "SELECT DISTINCT pID, pTitle, aName, pDate FROM " +
+            "(posts " +
+            "JOIN authors ON posts.aID = authors.aID) " +
+            "WHERE pTitle LIKE '%" + searchTerm + "%' " +
+            "ORDER BY pDate DESC " +
+            "LIMIT 20";
     }
 }

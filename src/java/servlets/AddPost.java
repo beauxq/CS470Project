@@ -2,7 +2,6 @@ package servlets;
 
 import DAL.DAL;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.servlet.ServletException;
@@ -15,22 +14,15 @@ public class AddPost extends HttpServlet
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
-       try
-        {
-            String pTitle = request.getParameter("pTitle");
-            String pText = request.getParameter("pText");
-            String pDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-            String aName = request.getParameter("aName");
-            String[] tags = request.getParameter("tags").split(" ");
-            
-            DAL dal = DAL.GetDAL();
-            dal.AddPost(pTitle, pText, pDate, aName, tags);
-        }
-        catch (SQLException ex)
-        {
-            System.out.println(ex.getMessage());
-        }
-       response.sendRedirect("recent_posts.jsp");
+        String pTitle = request.getParameter("pTitle");
+        String pText = request.getParameter("pText");
+        String pDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        String aName = request.getParameter("aName");
+        String[] tags = request.getParameter("tags").split(" ");
+
+        DAL dal = DAL.GetDAL();
+        dal.AddPost(pTitle, pText, pDate, aName, tags);
+        response.sendRedirect("recent_posts.jsp");
     }
     
     @Override

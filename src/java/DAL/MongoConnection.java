@@ -8,7 +8,7 @@ import com.mongodb.client.MongoDatabase;
 import java.util.List;
 import org.bson.Document;
 
-public class MongoConnection
+public class MongoConnection implements IConnection
 {
     private static String ipAddress = "72.129.239.46";
     private static String port = "27444";
@@ -19,12 +19,11 @@ public class MongoConnection
             "mongodb://" + userID +":" + password 
             + "@" + ipAddress + ":" + port + "/" + databaseName;
 
-    private static MongoConnection singleton = null;
     private static MongoClient mongoClient;
     private static MongoDatabase db;
     private static MongoCollection<Document> posts;
 
-    private MongoConnection()
+    MongoConnection()
     {
         try
         {
@@ -43,15 +42,6 @@ public class MongoConnection
         }
     }
 
-    public static MongoConnection GetMongoConnection()
-    {
-        if (singleton == null)
-        {
-            singleton = new MongoConnection();
-        }
-        return singleton;
-    }
-
     public void Close()
     {
         try
@@ -63,7 +53,6 @@ public class MongoConnection
             mongoClient.close();
 
             System.out.println("Closed MongoDB connection");
-            singleton = null;
         }
         catch (Exception ex)
         {
@@ -78,6 +67,12 @@ public class MongoConnection
     }
     
     public List<Post> GetPostsByAuthor(String aName)
+    {
+        return null;   
+    }
+    
+    public List<Post> Search(String byTitle, String byContent, 
+            String byTags, String byAuthor, String searchTerm)
     {
      return null;   
     }
