@@ -218,7 +218,6 @@ public class SQLConnection implements IConnection
     
     private static Post getPost(String sqlCmd) throws SQLException
     {
-        System.out.println("GETPOST");
         ResultSet rs = stmt.executeQuery(sqlCmd);
         boolean more = rs.next();
         Post post = new Post();
@@ -232,21 +231,16 @@ public class SQLConnection implements IConnection
             post.tags.add(rs.getString(6));
             more = rs.next();
         }
-        System.out.println("LEAVE GETPOST");
         return post;
     }
     
     private static List<Comment> getCommentList(String sqlCmd) throws SQLException
     {
-        System.out.println("GETCOMMENTS");
         List<Comment> comments = new ArrayList<>();
-        System.out.println("SQL");
         ResultSet rs = stmt.executeQuery(sqlCmd);
-        System.out.println("LEAVE SQL");
         boolean more = rs.next();
         while (more)
         {
-            System.out.println("iteration c");
             Comment c = new Comment();
             c.cID = rs.getString(1);
             c.aName = rs.getString(2);
@@ -255,7 +249,6 @@ public class SQLConnection implements IConnection
             comments.add(c);
             more = rs.next();
         }
-        System.out.println("LEAVE GETCOMMENTS");
         return comments;
     }
     
