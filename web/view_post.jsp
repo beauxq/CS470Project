@@ -1,82 +1,43 @@
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
+<%@page import="DataObjects.Comment"%>
+<%@page import="java.util.List"%>
+<%@page import="DataObjects.Post"%>
+<%@page import="DAL.DAL"%>
 
-<sql:query var="postQuery" dataSource="jdbc/blogData">
-    SELECT * FROM posts JOIN authors
-    ON posts.aID = authors.aID
-    WHERE posts.pID = ? <sql:param value="${param.pID}"/>
-</sql:query>
+<% DAL dal = DAL.GetDAL(); %>
+<% String pID = request.getParameter("pID") ; %>
+<% Post post = dal.GetPost(pID); %>
+<% List<Comment> comments = dal.GetComments(pID); %>
+<% String numComments = comments.size() + (comments.size() == 1 ? " comment" : " comments");%>
     
-<sql:query var="commentsQuery" dataSource="jdbc/blogData">
-    SELECT cID, cText, cDate, aName FROM (
-        authors JOIN (
-            SELECT * FROM comments
-            WHERE comments.pID = ? <sql:param value="${param.pID}"/>
-        ) AS postcomments
-        ON authors.aID = postcomments.aID
-    )
-    ORDER BY cDate ASC
-</sql:query>
-
-<sql:query var="commentCountQuery" dataSource="jdbc/blogData">
-    SELECT COUNT(cID) AS numComments FROM
-        authors JOIN (
-            SELECT * FROM comments
-            WHERE comments.pID = ? <sql:param value="${param.pID}"/>
-        ) AS postcomments
-        ON authors.aID = postcomments.aID
-</sql:query>
-        
-<sql:query var="tagsQuery" dataSource="jdbc/blogData">
-    SELECT tText FROM posttags JOIN tags
-    ON posttags.tID = tags.tID
-    WHERE posttags.pID = ? <sql:param value="${param.pID}"/>
-</sql:query>
-
-<c:set var="postDetails" value="${postQuery.rows[0]}"/>
-<c:set var="comments" value="${commentsQuery.rows}"/>
-<c:set var="commentsCount" value="${commentCountQuery.rows[0]}"/>
-<c:set var="tags" value="${tagsQuery.rows}"/>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-
 <html>
-
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>${postDetails.pTitle}</title>
-        <h1>${postDetails.pTitle}</h1>
+        <title><%=post.pTitle%></title>
+        <h1><%=post.pTitle%></h1>
         <a href="index.jsp">Home</a><br><br>
     </head>
+    <body>        
+        By: <a href="posts_by_author.jsp?aName=<%=post.aName%>"><%=post.aName%></a><br />
+        On: <%=post.pDate%><br /><br />
+        <%=post.pText%><br /><br />
+        
+        Tags: <%for (String tag : post.tags){%><%=tag%> <%}%><br /><br />
 
-    <body>
-        By: <a href="posts_by_author.jsp?aName=${postDetails.aName}">${postDetails.aName}</a><br />
-        On: ${postDetails.pDate}<br />
-        <br />${postDetails.pText}<br />
-        <br />
-        
-        Tags:<c:forEach var="row" items="${tags}"> ${row.tText}</c:forEach><br />
-        <br />
-        
-        ${commentsCount.numComments} comments on ${postDetails.pTitle}<br />
-        <c:forEach var="row" items="${comments}">
-            <br />
-            ${row.cText}
-            <br />
-            By ${row.aName} on ${row.cDate}
-            <br />
-        </c:forEach><br />
+        <%=numComments%> on <%=post.pTitle%><br />
+        <%for (Comment c : comments){%>
+            <br /><%=c.cText%><br />
+            By <%=c.aName%> on <%=c.cDate%><br />
+        <%}%><br/>
             
         <form method="get" action="add_comment">
-            <input type="hidden" name="pID" value="${param.pID}">
+            <input type="hidden" name="pID" value="<%=post.pID%>">
             Your comment:<br>
             <input type="text" name="cText" required><br>
             Your name:<br>
-            <input type="text" name="aName" required>
+            <input type="text" name="aName" required><br>
             <input type="submit" value="Add Comment">
-        </form>
-                
+        </form>       
     </body>
-
 </html>

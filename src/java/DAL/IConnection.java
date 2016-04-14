@@ -1,11 +1,16 @@
 package DAL;
 
+import DataObjects.Comment;
 import DataObjects.Post;
 import java.util.List;
 
 public interface IConnection
 {
     public void Close();
+    
+    public Post GetPost(String pID);
+    
+    public List<Comment> GetComments(String pID);
     
     public List<Post> GetRecentPosts();
     

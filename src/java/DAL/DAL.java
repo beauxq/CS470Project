@@ -1,5 +1,6 @@
 package DAL;
 
+import DataObjects.Comment;
 import DataObjects.Post;
 import java.util.List;
 
@@ -33,6 +34,16 @@ public class DAL
     public void CloseConnection()
     {
         connection.Close();
+    }
+    
+    public Post GetPost(String pID)
+    {
+        return connection.GetPost(pID);
+    }
+    
+    public List<Comment> GetComments(String pID)
+    {
+        return connection.GetComments(pID);
     }
     
     public List<Post> GetRecentPosts()

@@ -1,5 +1,6 @@
 package DAL;
 
+import DataObjects.Comment;
 import DataObjects.Post;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -58,6 +59,47 @@ public class SQLConnection implements IConnection
         }
     }
     
+    public Post GetPost(String pID)
+    {
+        Post post = new Post();
+        try
+        {
+            String sqlCmd = 
+                    "SELECT posts.pID, pTitle, aName, pDate, pText, tText "
+                    + "FROM posts "
+                    + "JOIN authors ON posts.aID = authors.aID "
+                    + "JOIN posttags ON posts.pID = posttags.pID "
+                    + "JOIN tags ON tags.tid = posttags.tID "
+                    + "WHERE posts.pID = " + pID;
+            post = getPost(sqlCmd);
+        }
+        catch (SQLException ex)
+        {
+            System.out.println(ex.getMessage());
+        }
+        return post;
+    }
+    
+    public List<Comment> GetComments(String pID)
+    {
+        List<Comment> comments = new ArrayList<>();
+        try
+        {
+            String sqlCmd = 
+                    "SELECT cID, aName, cDate, cText "
+                    + "FROM comments "
+                    + "JOIN authors on comments.aID = authors.aID "
+                    + "WHERE comments.pID = " + pID + " "
+                    + "ORDER BY cDate ASC";
+            comments = getCommentList(sqlCmd);
+        }
+        catch (SQLException ex)
+        {
+            System.out.println(ex.getMessage());
+        }
+        return comments;
+    }
+    
     public List<Post> GetRecentPosts()
     {
         List<Post> posts = new ArrayList();
@@ -69,7 +111,7 @@ public class SQLConnection implements IConnection
                     + "JOIN authors ON posts.aID = authors.aID) "
                     + "ORDER BY pDate DESC "
                     + "LIMIT 20";
-            posts = getPostsWithoutContent(sqlCmd);
+            posts = getPostList(sqlCmd);
         }
         catch (SQLException ex)
         {
@@ -93,7 +135,7 @@ public class SQLConnection implements IConnection
                     + "ON posts.aID = inputAuthor.aID) "
                     + "ORDER BY pDate DESC "
                     + "LIMIT 20";
-            posts = getPostsWithoutContent(sqlCmd);
+            posts = getPostList(sqlCmd);
         }
         catch (SQLException ex)
         {
@@ -126,7 +168,7 @@ public class SQLConnection implements IConnection
         }
         try
         {
-            posts = getPostsWithoutContent(sqlCmd);
+            posts = getPostList(sqlCmd);
         }
         catch (SQLException ex)
         {
@@ -174,7 +216,50 @@ public class SQLConnection implements IConnection
         }
     }  
     
-    private static List<Post> getPostsWithoutContent(String sqlCmd) throws SQLException
+    private static Post getPost(String sqlCmd) throws SQLException
+    {
+        System.out.println("GETPOST");
+        ResultSet rs = stmt.executeQuery(sqlCmd);
+        boolean more = rs.next();
+        Post post = new Post();
+        post.pID = rs.getString(1);
+        post.pTitle = rs.getString(2);
+        post.aName = rs.getString(3);
+        post.pDate = rs.getString(4);
+        post.pText = rs.getString(5);
+        while (more)
+        {
+            post.tags.add(rs.getString(6));
+            more = rs.next();
+        }
+        System.out.println("LEAVE GETPOST");
+        return post;
+    }
+    
+    private static List<Comment> getCommentList(String sqlCmd) throws SQLException
+    {
+        System.out.println("GETCOMMENTS");
+        List<Comment> comments = new ArrayList<>();
+        System.out.println("SQL");
+        ResultSet rs = stmt.executeQuery(sqlCmd);
+        System.out.println("LEAVE SQL");
+        boolean more = rs.next();
+        while (more)
+        {
+            System.out.println("iteration c");
+            Comment c = new Comment();
+            c.cID = rs.getString(1);
+            c.aName = rs.getString(2);
+            c.cDate = rs.getString(3);
+            c.cText = rs.getString(4);
+            comments.add(c);
+            more = rs.next();
+        }
+        System.out.println("LEAVE GETCOMMENTS");
+        return comments;
+    }
+    
+    private static List<Post> getPostList(String sqlCmd) throws SQLException
     {
         List<Post> posts = new ArrayList<>();
         ResultSet rs = stmt.executeQuery(sqlCmd);
@@ -191,7 +276,7 @@ public class SQLConnection implements IConnection
         }
         return posts;
     }
-
+    
     private static int nextID(String id, String tablename) throws SQLException
     {
         ResultSet rs;

@@ -16,7 +16,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Search Results</title>
-    <h1>Search Results for <i>${param.search}</i></h1>
+        <h1>Search Results for <i>${param.search}</i></h1>
         <a href="index.jsp">Home</a><br><br>
     </head>
     <body>

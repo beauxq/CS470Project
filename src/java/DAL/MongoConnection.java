@@ -1,5 +1,6 @@
 package DAL;
 
+import DataObjects.Comment;
 import DataObjects.Post;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
@@ -59,6 +60,16 @@ public class MongoConnection implements IConnection
             System.out.println("Failure closing MongoDB connection");
             System.out.println(ex.toString());
         }
+    }
+    
+    public Post GetPost(String pID)
+    {
+        return null;
+    }
+    
+    public List<Comment> GetComments(String pID)
+    {
+        return null;
     }
     
     public List<Post> GetRecentPosts()

@@ -20,10 +20,8 @@
         {
             String pLink = "view_post.jsp?pID=" + p.pID;
             String aLink = "posts_by_author.jsp?aName=" + p.aName; %>
-        
             <a href="<%=pLink%>"><%=p.pTitle%></a><br>
             By <a href="<%=aLink%>"><%=p.aName%></a> on <%=p.pDate%><br><br>
-
         <%}%>
     </body>
 </html>
