@@ -5,17 +5,19 @@
 <% DAL dal = DAL.GetDAL(); %>
 <% String aName = request.getParameter("aName") ; %>
 <% List<Post> posts = dal.GetPostsByAuthor(aName); %>
+<% String numPosts = posts.size() + (posts.size() == 1 ? " post" : " posts");%>
 
  <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Posts By ${param.aName}</title>
-        <h1>${param.aName}'s latest posts</h1>
+        <title>Posts By <%=aName%></title>
+        <h1><%=aName%>'s latest posts</h1>
         <a href="index.jsp">Home</a><br><br>
     </head>
     <body>
+        <i><%=numPosts%> by <%=aName%></i><br /><br />
         <% for (Post p : posts)
         {
             String pLink = "view_post.jsp?pID=" + p.pID;

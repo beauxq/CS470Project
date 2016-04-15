@@ -133,8 +133,7 @@ public class SQLConnection implements IConnection
                         + "WHERE aName = '" + aName + "') "
                         + "AS inputAuthor "
                     + "ON posts.aID = inputAuthor.aID) "
-                    + "ORDER BY pDate DESC "
-                    + "LIMIT 20";
+                    + "ORDER BY pDate DESC";
             posts = getPostList(sqlCmd);
         }
         catch (SQLException ex)
@@ -327,8 +326,7 @@ public class SQLConnection implements IConnection
             "OR pText LIKE '%" + searchTerm + "%' " +
             "OR tText LIKE '%" + searchTerm + "%' " +
             "OR aName LIKE '%" + searchTerm + "%' " +
-            "ORDER BY pDate DESC " +
-            "LIMIT 20";
+            "ORDER BY pDate DESC";
     }
     
     private static String searchByTitleContentTags(String searchTerm)
@@ -341,8 +339,7 @@ public class SQLConnection implements IConnection
             "WHERE pTitle LIKE '%" + searchTerm + "%' " +
             "OR pText LIKE '%" + searchTerm + "%' " +
             "OR tText LIKE '%" + searchTerm + "%' " +
-            "ORDER BY pDate DESC " +
-            "LIMIT 20";
+            "ORDER BY pDate DESC";
     }
     
     private static String searchByTitleContent(String searchTerm)
@@ -352,8 +349,7 @@ public class SQLConnection implements IConnection
             "JOIN authors ON posts.aID = authors.aID) " +
             "WHERE pTitle LIKE '%" + searchTerm + "%' " +
             "OR pText LIKE '%" + searchTerm + "%' " +
-            "ORDER BY pDate DESC " +
-            "LIMIT 20";
+            "ORDER BY pDate DESC";
     }
     
     private static String searchByTitle(String searchTerm)
@@ -362,7 +358,6 @@ public class SQLConnection implements IConnection
             "(posts " +
             "JOIN authors ON posts.aID = authors.aID) " +
             "WHERE pTitle LIKE '%" + searchTerm + "%' " +
-            "ORDER BY pDate DESC " +
-            "LIMIT 20";
+            "ORDER BY pDate DESC";
     }
 }

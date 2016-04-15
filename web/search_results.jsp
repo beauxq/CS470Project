@@ -9,6 +9,7 @@
 <% String author = request.getParameter("author") ; %>
 <% String searchTerm = request.getParameter("search") ; %>
 <% List<Post> posts = dal.Search(title, content, tags, author, searchTerm); %>
+<% String numResults = posts.size() + (posts.size() == 1 ? " result" : " results");%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -16,10 +17,11 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Search Results</title>
-        <h1>Search Results for <i>${param.search}</i></h1>
+        <h1>Search Results for <i><%=searchTerm%></i></h1>
         <a href="index.jsp">Home</a><br><br>
     </head>
     <body>
+        <i><%=numResults%> for <%=searchTerm%></i><br /><br />
         <% for (Post p : posts)
         {
             String pLink = "view_post.jsp?pID=" + p.pID;
