@@ -12,8 +12,8 @@
         <form action="search_results.jsp">
             <input type="text" name="search">
             <input type="checkbox" name="title" id="title" onclick="titleClick()">Title  
-            <input type="checkbox" name="content" id="content" onclick="contentClick()" disabled>Content  
             <input type="checkbox" name="tags" id="tags" onclick="tagsClick()" disabled>Tags  
+            <input type="checkbox" name="content" id="content" onclick="contentClick()" disabled>Content  
             <input type="checkbox" name="author" id="author" disabled>Authors
             <input type="submit" id="searchbutton" value="Search" disabled>
         </form>
@@ -30,30 +30,32 @@
         {
             if (! title.checked)
             {
-                content.checked = false;
-                contentClick();
-            }
-            content.disabled = !(title.checked);
-            searchbutton.disabled = content.disabled;
-        }
-
-        function contentClick()
-        {
-            if (! content.checked)
-            {
                 tags.checked = false;
                 tagsClick();
             }
-            tags.disabled = !(content.checked);
+            tags.disabled = !(title.checked);
+            searchbutton.disabled = tags.disabled;
         }
+
+
         
         function tagsClick()
         {
             if (! tags.checked)
             {
+                content.checked = false;
+                contentClick();
+            }
+            content.disabled = !(tags.checked);
+        }
+        
+        function contentClick()
+        {
+            if (! content.checked)
+            {
                 author.checked = false;
             }
-            author.disabled = !(tags.checked);
+            author.disabled = !(content.checked);
         }
     </script>
 </html>

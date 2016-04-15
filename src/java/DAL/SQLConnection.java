@@ -151,15 +151,15 @@ public class SQLConnection implements IConnection
 
         if (byAuthor != null)
         {
-            sqlCmd = searchByTitleContentTagsAuthor(searchTerm);
-        }
-        else if (byTags != null)
-        {
-            sqlCmd = searchByTitleContentTags(searchTerm);
+            sqlCmd = searchByTitleTagsContentAuthor(searchTerm);
         }
         else if (byContent != null)
         {
-            sqlCmd = searchByTitleContent(searchTerm);
+            sqlCmd = searchByTitleTagsContent(searchTerm);
+        }
+        else if (byTags != null)
+        {
+            sqlCmd = searchByTitleTags(searchTerm);
         }
         else
         {
@@ -315,7 +315,7 @@ public class SQLConnection implements IConnection
         return tID;
     }
     
-    private static String searchByTitleContentTagsAuthor(String searchTerm)
+    private static String searchByTitleTagsContentAuthor(String searchTerm)
     {
         return "SELECT DISTINCT posts.pID, pTitle, aName, pDate FROM " +
             "(posts " +
@@ -329,7 +329,7 @@ public class SQLConnection implements IConnection
             "ORDER BY pDate DESC";
     }
     
-    private static String searchByTitleContentTags(String searchTerm)
+    private static String searchByTitleTagsContent(String searchTerm)
     {
         return "SELECT DISTINCT posts.pID, pTitle, aName, pDate FROM " +
             "(posts " +
@@ -342,13 +342,15 @@ public class SQLConnection implements IConnection
             "ORDER BY pDate DESC";
     }
     
-    private static String searchByTitleContent(String searchTerm)
+    private static String searchByTitleTags(String searchTerm)
     {
-        return "SELECT DISTINCT pID, pTitle, aName, pDate FROM " +
+        return "SELECT DISTINCT posts.pID, pTitle, aName, pDate FROM " +
             "(posts " +
-            "JOIN authors ON posts.aID = authors.aID) " +
+            "JOIN authors ON posts.aID = authors.aID " +
+            "JOIN posttags ON posts.pID = postTags.pID " +
+            "JOIN tags ON postTags.tID = tags.tID) " +
             "WHERE pTitle LIKE '%" + searchTerm + "%' " +
-            "OR pText LIKE '%" + searchTerm + "%' " +
+            "OR tText LIKE '%" + searchTerm + "%' " +
             "ORDER BY pDate DESC";
     }
     
