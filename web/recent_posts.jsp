@@ -9,13 +9,14 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link rel="stylesheet" href="style.css" type="text/css">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Recent Posts</title>
-        <h1>Recent Posts</h1>
-        <a href="index.jsp">Home</a><br><br>
+        <h1 class="heading">Recent Posts</h1>
+        <a href="index.jsp" class="button1">Home</a><br><br>
     </head>
 
-    <body>
+    <body class="bgc">
         <% for (Post p : posts)
         {
             String pLink = "view_post.jsp?pID=" + p.pID;

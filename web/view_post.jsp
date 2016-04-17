@@ -13,12 +13,13 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link rel="stylesheet" href="style.css" type="text/css">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title><%=post.pTitle%></title>
-        <h1><%=post.pTitle%></h1>
+        <h1 class="heading"><%=post.pTitle%></h1>
         <a href="index.jsp">Home</a><br><br>
     </head>
-    <body>        
+    <body class="bgc">        
         By: <a href="posts_by_author.jsp?aName=<%=post.aName%>"><%=post.aName%></a><br />
         On: <%=post.pDate%><br /><br />
         <%=post.pText%><br /><br />

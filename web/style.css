@@ -1,0 +1,52 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Apr 16, 2016, 3:04:23 PM
+    Author     : Drakkonex
+*/
+
+.bgc{
+    background-color: lightblue;
+}
+
+.button1{
+    background-color: red;
+    border: outset;
+    color: white;
+    padding: 10px 28px;
+    text-align: center;
+    text-decoration: none;
+    font-family: initial;
+    display: inline-block;
+    font-size: 13px;
+    margin: 2px 4px;
+    cursor: pointer;
+}
+
+.button2{
+    background-color: blueviolet;
+    border: 2px ridge red;
+    color: white;
+    padding: 3px 7px;
+    text-align: center;
+    text-decoration: none;
+    font-family: initial;
+    display: compact;
+    font-size: 12px;
+    margin: 2px 4px;
+    cursor: pointer;
+}
+
+.heading{
+    background-color: white;
+    border: 2px;
+    padding: 5px 18px;
+    font-family: Tahoma;
+    margin: 2px 4px;
+    text-align: center;
+    border-radius: 6px;
+    display: inline-block;
+}

@@ -20,7 +20,7 @@
         <h1>Search Results for <i><%=searchTerm%></i></h1>
         <a href="index.jsp">Home</a><br><br>
     </head>
-    <body>
+    <body class="bgc">
         <i><%=numResults%> for <%=searchTerm%></i><br /><br />
         <% for (Post p : posts)
         {
