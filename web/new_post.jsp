@@ -2,12 +2,13 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link rel="stylesheet" type="text/css" href="style.css">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>New Post</title>
         <h1>New Post</h1>
         <a href="index.jsp">Home</a><br><br>
     </head>
-    <body>
+    <body class="bgc">
         <form method="get" action="add_post">
             Your name:<br>
             <input type="text" name="aName" required><br>

@@ -11,7 +11,7 @@ import org.bson.Document;
 
 public class MongoConnection implements IConnection
 {
-    private static String ipAddress = "72.129.239.46";
+    private static String ipAddress = "136.63.18.225";
     private static String port = "27444";
     private static String userID = "cs470";
     private static String password = "cs470lnw";
