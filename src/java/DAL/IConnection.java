@@ -16,11 +16,14 @@ public interface IConnection
     
     public List<Post> GetPostsByAuthor(String aName);
     
-    public List<Post> Search(String byTitle, String byContent, 
-            String byTags, String byAuthor, String searchTerm);
+    public List<Post> Search(String byTitle, String byTags, 
+            String byContent, String byAuthor, String searchTerm);
     
-    public void AddPost(String pTitle, String pText, String pDate, 
-            String aName, String[] tags);
+    public void AddPost(Post post);
     
-    public void AddComment(String pID, String cText, String cDate, String aName);
+    public void AddPosts(List<Post> posts);
+    
+    public void AddComment(String pID, Comment comment);
+    
+    public void EmptyDatabase();
 }

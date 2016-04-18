@@ -12,7 +12,7 @@ import java.util.List;
 
 public class SQLConnection implements IConnection
 {
-    private static String ipAddress = "72.129.239.46";
+    private static String ipAddress = "136.63.18.225";
     private static String port = "3306";
     private static String databaseName = "470blog";
     private static String userID = "cs470";
@@ -143,8 +143,8 @@ public class SQLConnection implements IConnection
         return posts;
     }
     
-    public List<Post> Search(String byTitle, String byContent, 
-            String byTags, String byAuthor, String searchTerm)
+    public List<Post> Search(String byTitle, String byTags, 
+            String byContent, String byAuthor, String searchTerm)
     {
         List<Post> posts = new ArrayList();
         String sqlCmd = "";
@@ -176,17 +176,16 @@ public class SQLConnection implements IConnection
         return posts;
     }
     
-    public void AddPost(String pTitle, String pText, String pDate, 
-            String aName, String[] tags)
+    public void AddPost(Post post)
     {
         try
         {
             int pID = nextID("pid", "posts");
-            int aID = getAuthorID(aName);
-            stmt.execute("INSERT INTO posts VALUES (" + pID + ", '" + pTitle 
-                    + "', '" + pText + "', '" + pDate + "', " + aID + ")");
+            int aID = getAuthorID(post.aName);
+            stmt.execute("INSERT INTO posts VALUES (" + pID + ", '" + post.pTitle 
+                    + "', '" + post.pText + "', '" + post.pDate + "', " + aID + ")");
 
-            for (String tag : tags)
+            for (String tag : post.tags)
             {
                 int tID = getTagID(tag);
                 stmt.execute("INSERT INTO posttags VALUES (" 
@@ -199,21 +198,81 @@ public class SQLConnection implements IConnection
         }
     }
     
-    public void AddComment(String pID, String cText, String cDate, String aName) 
+    public void AddPosts(List<Post> posts)
     {
         try
         {
-            int cID = nextID("cid", "comments");
-            int aID = getAuthorID(aName);
- 
-            stmt.execute("INSERT INTO comments VALUES (" + cID + ", '" + cText + 
-                    "', " + pID + ", '" + cDate + "', " + aID + ")");
+            int nextPID = nextID("pid", "posts");
+            
+            String sqlCmd_posts = "INSERT INTO posts VALUES ";
+            String sqlCmd_tags = "INSERT INTO posttags VALUES ";
+            
+            String commaSep = "";
+            for (Post post : posts)
+            {
+                int aID = getAuthorID(post.aName);    
+                sqlCmd_posts += commaSep;
+
+                sqlCmd_posts += "(" + nextPID + ", '" + post.pTitle + "', '" +
+                        post.pText + "', '" + post.pDate + "', " + aID + ")";
+
+                for (String tag : post.tags)
+                {
+                    int tID = getTagID(tag);
+                    sqlCmd_tags += commaSep;
+                    commaSep = ", ";
+                    sqlCmd_tags += "(" + nextPID + ", " + tID + ")";
+                }
+                commaSep = ", ";                
+                nextPID++;
+            }
+            
+            stmt.execute(sqlCmd_posts);
+            stmt.execute(sqlCmd_tags);
         }
         catch (SQLException ex)
         {
             System.out.println(ex.getMessage());
         }
-    }  
+    }
+    
+    public void AddComment(String pID, Comment comment) 
+    {
+        try
+        {
+            int cID = nextID("cid", "comments");
+            int aID = getAuthorID(comment.aName);
+ 
+            stmt.execute("INSERT INTO comments VALUES (" + cID + ", '" + comment.cText + 
+                    "', " + pID + ", '" + comment.cDate + "', " + aID + ")");
+        }
+        catch (SQLException ex)
+        {
+            System.out.println(ex.getMessage());
+        }
+    }
+    
+    public void EmptyDatabase()
+    {
+        try
+        {
+            stmt.execute("SET FOREIGN_KEY_CHECKS = 0");
+            stmt.execute("TRUNCATE TABLE comments");
+            stmt.execute("TRUNCATE TABLE posttags");
+            stmt.execute("TRUNCATE TABLE posts");
+            stmt.execute("TRUNCATE TABLE tags");
+            stmt.execute("TRUNCATE TABLE authors");
+            stmt.execute("SET FOREIGN_KEY_CHECKS = 1");
+            stmt.execute("INSERT INTO authors VALUES (1, 'Atreya', 'password')");
+            stmt.execute("INSERT INTO authors VALUES (2, 'Doug', 'password')");
+            stmt.execute("INSERT INTO authors VALUES (3, 'Eric', 'password')");
+            stmt.execute("INSERT INTO authors VALUES (4, 'Sundar', 'password')");
+        }
+        catch (SQLException ex)
+        {
+            System.out.println(ex.getMessage());
+        }
+    }
     
     private static Post getPost(String sqlCmd) throws SQLException
     {

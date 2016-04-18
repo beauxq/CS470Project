@@ -25,7 +25,7 @@
         
         Tags: <%for (String tag : post.tags){%><%=tag%> <%}%><br /><br />
 
-        <i><%=numComments%> on <%=post.pTitle%></i><br />
+        <%=numComments%> on <i><%=post.pTitle%></i><br />
         <%for (Comment c : comments){%>
             <br /><%=c.cText%><br />
             By <%=c.aName%> on <%=c.cDate%><br />

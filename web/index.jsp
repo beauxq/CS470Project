@@ -12,6 +12,7 @@
             <li><a href="search.jsp">Search Posts</a></li>
             <li><a href="recent_posts.jsp">Recent Posts</a></li>
             <li><a href="new_post.jsp">New Post</a></li>
+            <li><a href="performance.jsp">Performance Test</a></li>
         </list>
     </body>
 </html>

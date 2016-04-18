@@ -21,8 +21,8 @@
     
     <script>
         var title = document.getElementById("title");
-        var content = document.getElementById("content");
         var tags = document.getElementById("tags");
+        var content = document.getElementById("content");
         var author = document.getElementById("author");
         var searchbutton = document.getElementById("searchbutton");
 
@@ -37,8 +37,6 @@
             searchbutton.disabled = tags.disabled;
         }
 
-
-        
         function tagsClick()
         {
             if (! tags.checked)

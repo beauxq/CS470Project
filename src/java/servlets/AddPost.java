@@ -1,8 +1,11 @@
 package servlets;
 
 import DAL.DAL;
+import DataObjects.Post;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -14,14 +17,15 @@ public class AddPost extends HttpServlet
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
-        String pTitle = request.getParameter("pTitle");
-        String pText = request.getParameter("pText");
-        String pDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-        String aName = request.getParameter("aName");
-        String[] tags = request.getParameter("tags").split(" ");
-
         DAL dal = DAL.GetDAL();
-        dal.AddPost(pTitle, pText, pDate, aName, tags);
+        Post post = new Post();
+        post.pTitle = request.getParameter("pTitle");
+        post.pText = request.getParameter("pText");
+        post.pID = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        post.aName = request.getParameter("aName");
+        post.tags = new ArrayList();
+        post.tags.addAll(Arrays.asList(request.getParameter("tags").split(" ")));
+        dal.AddPost(post);
         response.sendRedirect("recent_posts.jsp");
     }
     

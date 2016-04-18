@@ -4,11 +4,11 @@
 
 <% DAL dal = DAL.GetDAL(); %>
 <% String title = request.getParameter("title") ; %>
-<% String content = request.getParameter("content") ; %>
 <% String tags = request.getParameter("tags") ; %>
+<% String content = request.getParameter("content") ; %>
 <% String author = request.getParameter("author") ; %>
 <% String searchTerm = request.getParameter("search") ; %>
-<% List<Post> posts = dal.Search(title, content, tags, author, searchTerm); %>
+<% List<Post> posts = dal.Search(title, tags, content, author, searchTerm); %>
 <% String numResults = posts.size() + (posts.size() == 1 ? " result" : " results");%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>

@@ -8,6 +8,10 @@
         <servlet-name>AddPost</servlet-name>
         <servlet-class>servlets.AddPost</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>PerformanceTest</servlet-name>
+        <servlet-class>servlets.PerformanceTest</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>AddComment</servlet-name>
         <url-pattern>/add_comment</url-pattern>
@@ -15,6 +19,10 @@
     <servlet-mapping>
         <servlet-name>AddPost</servlet-name>
         <url-pattern>/add_post</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PerformanceTest</servlet-name>
+        <url-pattern>/performance_test</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

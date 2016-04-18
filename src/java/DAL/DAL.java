@@ -30,6 +30,16 @@ public class DAL
         }
         return singleton;
     }
+    
+    public static DAL GetDAL(Boolean useSQL)
+    {
+        if (singleton != null && usingSQL != useSQL)
+        {
+            connection.Close();
+        }
+        usingSQL = useSQL;
+        return GetDAL();
+    }
 
     public void CloseConnection()
     {
@@ -56,20 +66,29 @@ public class DAL
         return connection.GetPostsByAuthor(aName);
     }
     
-    public List<Post> Search(String byTitle, String byContent, 
-            String byTags, String byAuthor, String searchTerm)
+    public List<Post> Search(String byTitle, String byTags, 
+            String byContent, String byAuthor, String searchTerm)
     {
-        return connection.Search(byTitle, byContent, byTags, byAuthor, searchTerm);
+        return connection.Search(byTitle, byTags, byContent, byAuthor, searchTerm);
     }
     
-    public void AddPost(String pTitle, String pText, String pDate, 
-            String aName, String[] tags)
+    public void AddPost(Post post)
     {
-        connection.AddPost(pTitle, pText, pDate, aName, tags);
+        connection.AddPost(post);
     }
     
-    public void AddComment(String pID, String cText, String cDate, String aName) 
+    public void AddPosts(List<Post> posts)
     {
-        connection.AddComment(pID, cText, cDate, aName);
+        connection.AddPosts(posts);
+    }
+    
+    public void AddComment(String pID, Comment comment) 
+    {
+        connection.AddComment(pID, comment);
+    }
+    
+    public void EmptyDatabase()
+    {
+        connection.EmptyDatabase();
     }
 }

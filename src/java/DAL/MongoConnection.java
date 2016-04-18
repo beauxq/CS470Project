@@ -11,7 +11,7 @@ import org.bson.Document;
 
 public class MongoConnection implements IConnection
 {
-    private static String ipAddress = "72.129.239.46";
+    private static String ipAddress = "136.63.18.225";
     private static String port = "27444";
     private static String userID = "cs470";
     private static String password = "cs470lnw";
@@ -82,19 +82,28 @@ public class MongoConnection implements IConnection
         return null;   
     }
     
-    public List<Post> Search(String byTitle, String byContent, 
-            String byTags, String byAuthor, String searchTerm)
+    public List<Post> Search(String byTitle, String byTags, 
+            String byContent, String byAuthor, String searchTerm)
     {
      return null;   
     }
     
-    public void AddPost(String pTitle, String pText, String pDate, 
-            String aName, String[] tags)
+    public void AddPost(Post post)
     {
         
     }
     
-    public void AddComment(String pID, String cText, String cDate, String aName) 
+    public void AddPosts(List<Post> posts)
+    {
+        
+    }
+    
+    public void AddComment(String pID, Comment comment) 
+    {
+        
+    }
+    
+    public void EmptyDatabase()
     {
         
     }

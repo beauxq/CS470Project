@@ -1,6 +1,7 @@
 package servlets;
 
 import DAL.DAL;
+import DataObjects.Comment;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -14,13 +15,13 @@ public class AddComment extends HttpServlet
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {
-        String pID = request.getParameter("pID");
-        String cText = request.getParameter("cText");
-        String cDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-        String aName = request.getParameter("aName");
-
         DAL dal = DAL.GetDAL();
-        dal.AddComment(pID, cText, cDate, aName);
+        Comment comment = new Comment();
+        comment.cText = request.getParameter("cText");
+        comment.cDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        comment.aName = request.getParameter("aName");
+        String pID = request.getParameter("pID");
+        dal.AddComment(pID, comment);
         response.sendRedirect("view_post.jsp?pID=" + request.getParameter("pID"));
     }
 
