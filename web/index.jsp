@@ -12,7 +12,7 @@
         <list>
             <li><a href="search.jsp" class="button1">Search Posts</a></li>
             <li><a href="recent_posts.jsp" class="button1">Recent Posts</a></li>
-            <li><a href="new_post.jsp" class="button1">&nbsp&nbspNew Post&nbsp&nbsp&nbsp</a></li>
+            <li><a href="new_post.jsp" class="button1">&nbsp&nbspNewPost&nbsp&nbsp&nbsp</a></li>
         </list>
     </body>
 </html>

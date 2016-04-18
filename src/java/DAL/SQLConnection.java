@@ -12,7 +12,7 @@ import java.util.List;
 
 public class SQLConnection implements IConnection
 {
-    private static String ipAddress = "72.129.239.46";
+    private static String ipAddress = "136.63.18.225";
     private static String port = "3306";
     private static String databaseName = "470blog";
     private static String userID = "cs470";
