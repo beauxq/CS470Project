@@ -17,7 +17,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title><%=post.pTitle%></title>
         <h1><%=post.pTitle%></h1>
-        <a href="index.jsp">Home</a><br><br>
+        <a href="index.jsp" class="heading">Home</a><br><br>
     </head>
     <body class="bgc">        
         By: <a href="posts_by_author.jsp?aName=<%=post.aName%>"><%=post.aName%></a><br />

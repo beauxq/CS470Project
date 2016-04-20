@@ -5,8 +5,8 @@
         <link rel="stylesheet" type="text/css" href="style.css">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Search Posts</title>
-        <h1>Search Posts</h1>
-        <a href="index.jsp">Home</a><br><br>
+        <h1 class="heading">Search Posts</h1>
+        <a href="index.jsp" class="button1">Home</a><br><br>
     </head>
 
     <body class="bgc">
