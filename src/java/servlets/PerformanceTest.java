@@ -28,18 +28,20 @@ public class PerformanceTest extends HttpServlet
             DAL dal = DAL.GetDAL("MySQL".equals(db));
             PostBuilder pb = PostBuilder.GetPostBuilder();
             
-            List<Integer> dbSizes = Arrays.asList(0, 1000, 1070, 1150, 1235, 1320, 1415, 
-                    1520, 1630, 1750, 1875, 2010, 2155, 2310, 2475, 2655, 2850, 3055, 
-                    3275, 3510, 3765, 4035, 4330, 4640, 4975, 5335, 5720, 6135, 6580, 
-                    7055, 7565, 8110, 8695, 9325, 10000, 10725, 11500, 12330, 13220, 
-                    14175, 15200, 16300, 17475, 18740, 20090, 21545, 23100, 24770, 
-                    26560, 28480, 30540, 32745, 35110, 37650, 40370, 43290, 46415, 
-                    49770, 53365, 57225, 61360, 65795, 70550, 75645, 81115, 86975, 
-                    93260, 100000, 107225, 114975, 123285, 132195, 141745, 151990, 
-                    162975, 174755, 187380, 200925, 215445, 231015, 247710, 265610, 
-                    284805, 305385, 327455, 351120, 376495, 403700, 432875, 464160, 
-                    497700, 533670, 572235, 613590, 657935, 705480, 756465, 811130, 
-                    869750, 932605, 1000000);
+//            List<Integer> dbSizes = Arrays.asList(0, 1000, 1070, 1150, 1235, 1320, 1415, 
+//                    1520, 1630, 1750, 1875, 2010, 2155, 2310, 2475, 2655, 2850, 3055, 
+//                    3275, 3510, 3765, 4035, 4330, 4640, 4975, 5335, 5720, 6135, 6580, 
+//                    7055, 7565, 8110, 8695, 9325, 10000, 10725, 11500, 12330, 13220, 
+//                    14175, 15200, 16300, 17475, 18740, 20090, 21545, 23100, 24770, 
+//                    26560, 28480, 30540, 32745, 35110, 37650, 40370, 43290, 46415, 
+//                    49770, 53365, 57225, 61360, 65795, 70550, 75645, 81115, 86975, 
+//                    93260, 100000, 107225, 114975, 123285, 132195, 141745, 151990, 
+//                    162975, 174755, 187380, 200925, 215445, 231015, 247710, 265610, 
+//                    284805, 0, 327455, 351120, 376495, 403700, 432875, 464160, //305385
+//                    497700, 533670, 572235, 613590, 657935, 705480, 756465, 811130, 
+//                    869750, 932605, 1000000);
+            
+            List<Integer> dbSizes = Arrays.asList(0, 10, 20, 30);
             
             results += "Performance Results for " + db + ":<br>";
             results += "<table>";
@@ -52,11 +54,11 @@ public class PerformanceTest extends HttpServlet
             for (int i = 1; i < dbSizes.size(); i++)
             {
                 System.out.println("Timing test " + i + " of " + (dbSizes.size() - 1) + "...");
-                results += "<tr><td>" + i + "</td>";
+                results += "<tr><td>" + dbSizes.get(i) + "</td>";
                 
                 // insert new posts
                 int numNewPosts = dbSizes.get(i) - dbSizes.get(i - 1);
-                insertPosts(pb, dal, numNewPosts);
+                insertPosts(pb, dal, numNewPosts, dbSizes.get(i - 1));
                 
                 // perform search testing
                 System.out.println("Searching " + dbSizes.get(i) + " posts...");
@@ -86,19 +88,31 @@ public class PerformanceTest extends HttpServlet
         processRequest(request, response);
     }
     
-    private void insertPosts(PostBuilder pb, DAL dal, int numPosts)
+    private void insertPosts(PostBuilder pb, DAL dal, int numPosts, int baseCount)
     {
+        while (numPosts > 10000)
+        {
+            numPosts -= 10000;
+            insertPosts(pb, dal, 10000, baseCount);
+            baseCount += 10000;
+        }
+        // posts limited to 10,000 to prevent memory overflow
         List<Post> posts = new ArrayList<>();
         for (int i = 0; i < numPosts; i++)
         {
+            if (i % 100 == 0) 
+            {
+                System.out.println("Creating post " + (baseCount + i) + "..."); 
+            }
             Post post = new Post();
             post.tags = pb.CreateTags();
             post.pText = pb.CreatePost(post.tags);
             post.pTitle = pb.CreateTitle(post.pText);
             post.aName = getName(post.pTitle);
-            post.pDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+            post.pDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date());
             posts.add(post);
         }
+        System.out.println("Inserting posts to db...");
         dal.AddPosts(posts);
     }
     

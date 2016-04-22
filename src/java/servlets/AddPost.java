@@ -21,7 +21,7 @@ public class AddPost extends HttpServlet
         Post post = new Post();
         post.pTitle = request.getParameter("pTitle");
         post.pText = request.getParameter("pText");
-        post.pID = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        post.pDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date());
         post.aName = request.getParameter("aName");
         post.tags = new ArrayList();
         post.tags.addAll(Arrays.asList(request.getParameter("tags").split(" ")));

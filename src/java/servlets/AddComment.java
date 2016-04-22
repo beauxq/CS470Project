@@ -18,7 +18,7 @@ public class AddComment extends HttpServlet
         DAL dal = DAL.GetDAL();
         Comment comment = new Comment();
         comment.cText = request.getParameter("cText");
-        comment.cDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+        comment.cDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date());
         comment.aName = request.getParameter("aName");
         String pID = request.getParameter("pID");
         dal.AddComment(pID, comment);

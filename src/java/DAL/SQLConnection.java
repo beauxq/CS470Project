@@ -200,6 +200,11 @@ public class SQLConnection implements IConnection
     
     public void AddPosts(List<Post> posts)
     {
+        while (posts.size() > 350)
+        {
+            AddPosts(posts.subList(0, 350));
+            posts = posts.subList(350, posts.size());
+        }
         try
         {
             int nextPID = nextID("pid", "posts");
