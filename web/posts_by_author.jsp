@@ -11,12 +11,13 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link rel="stylesheet" type="text/css" href="style.css">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Posts By <%=aName%></title>
         <h1><%=aName%>'s latest posts</h1>
         <a href="index.jsp">Home</a><br><br>
     </head>
-    <body>
+    <body class="bgc">
         <i><%=numPosts%> by <%=aName%></i><br /><br />
         <% for (Post p : posts)
         {

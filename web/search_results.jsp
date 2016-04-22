@@ -15,12 +15,13 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link rel="stylesheet" type="text/css" href="style.css">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Search Results</title>
-        <h1>Search Results for <i><%=searchTerm%></i></h1>
-        <a href="index.jsp">Home</a><br><br>
+        <h1 class="heading">Search Results for <i><%=searchTerm%></i></h1>
+        <a href="index.jsp" class="button1">Home</a><br><br>
     </head>
-    <body>
+    <body class="bgc">
         <i><%=numResults%> for <%=searchTerm%></i><br /><br />
         <% for (Post p : posts)
         {
