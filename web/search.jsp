@@ -2,11 +2,16 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" type="text/css" href="style.css">
+        <link rel="stylesheet" type="text/css" href="Style/style.css">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Search Posts</title>
-        <h1 class="heading">Search Posts</h1>
-        <a href="index.jsp" class="button1">Home</a><br><br>
+        <h1>Search Posts</h1>
+        <br>
+        <a href="index.jsp" class="button">Home</a>
+        <a href="search.jsp" class="button">Search Posts</a>
+        <a href="recent_posts.jsp" class="button">Recent Posts</a>
+        <a href="new_post.jsp" class="button">New Post</a>
+        <a href="performance.jsp" class="button">Performance Testing</a>
     </head>
 
     <body class="bgc">
@@ -22,8 +27,8 @@
     
     <script>
         var title = document.getElementById("title");
-        var tags = document.getElementById("tags");
         var content = document.getElementById("content");
+        var tags = document.getElementById("tags");
         var author = document.getElementById("author");
         var searchbutton = document.getElementById("searchbutton");
 
@@ -38,6 +43,8 @@
             searchbutton.disabled = tags.disabled;
         }
 
+
+        
         function tagsClick()
         {
             if (! tags.checked)

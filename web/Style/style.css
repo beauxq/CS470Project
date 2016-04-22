@@ -1,52 +1,54 @@
-/*
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
-*/
-/* 
-    Created on : Apr 16, 2016, 3:04:23 PM
-    Author     : Drakkonex
-*/
-
 .bgc{ 
-    background-color: lightblue;
+    background-color: lightsteelblue;
 }
 
-.button1{ 
-    background-color: red;
-    border: outset;
+.button{ 
+    background-color: steelblue;
     color: white;
     padding: 10px 28px;
     text-align: center;
+    font-family: sans-serif;
+    font-weight: bold;
     text-decoration: none;
-    font-family: initial;
     display: inline-block;
-    font-size: 13px;
-    margin: 2px 4px;
+    font-size: 16px;
+    margin: 2px 4px 20px;
     cursor: pointer;
+    border-radius: 6px;
 }
 
-.button2{ 
-    background-color: blueviolet;
-    border: 2px ridge red;
+.button_small{ 
+    background-color: steelblue;
     color: white;
     padding: 3px 7px;
     text-align: center;
     text-decoration: none;
-    font-family: initial;
+    font-family: sans-serif;
     display: compact;
     font-size: 12px;
     margin: 2px 4px;
+    border-radius: 6px;
     cursor: pointer;
 }
 
-.heading{ 
-    background-color: white;
-    border: 2px;
+h1{ 
+    background-color: aliceblue;
+    color: steelblue;
     padding: 5px 18px;
     font-family: Tahoma;
-    margin: 2px 4px;
-    text-align: center;
+    margin: 2px 4px 20px 4px;
+    text-align: left;
     border-radius: 6px;
     display: inline-block;
+    width: 770px;
+}
+
+.post{
+    background-color: aliceblue;
+    padding: 7px 7px;
+    //font-family: sans-serif;
+    //display: inline-block;
+    margin: 10px 4px 10px;
+    border-radius: 6px;
+    width: 790px;
 }

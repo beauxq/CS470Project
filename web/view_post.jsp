@@ -13,19 +13,25 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" type="text/css" href="style.css">
+        <link rel="stylesheet" type="text/css" href="Style/style.css">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title><%=post.pTitle%></title>
         <h1><%=post.pTitle%></h1>
-        <a href="index.jsp" class="heading">Home</a><br><br>
+        <br>
+        <a href="index.jsp" class="button">Home</a>
+        <a href="search.jsp" class="button">Search Posts</a>
+        <a href="recent_posts.jsp" class="button">Recent Posts</a>
+        <a href="new_post.jsp" class="button">New Post</a>
+        <a href="performance.jsp" class="button">Performance Testing</a>
     </head>
-    <body class="bgc">        
-        By: <a href="posts_by_author.jsp?aName=<%=post.aName%>"><%=post.aName%></a><br />
-        On: <%=post.pDate%><br /><br />
-        <%=post.pText%><br /><br />
-        
-        Tags: <%for (String tag : post.tags){%><%=tag%> <%}%><br /><br />
+    <body class="bgc">    
+        <div class="post">
+            By: <a href="posts_by_author.jsp?aName=<%=post.aName%>"><%=post.aName%></a><br />
+            On: <%=post.pDate%><br /><br />
+            <%=post.pText%><br /><br />
 
+            Tags: <%for (String tag : post.tags){%><%=tag%> <%}%><br /><br />
+        </div>
         <%=numComments%> on <i><%=post.pTitle%></i><br />
         <%for (Comment c : comments){%>
             <br /><%=c.cText%><br />

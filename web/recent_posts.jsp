@@ -9,11 +9,16 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" type="text/css" href="style.css">
+        <link rel="stylesheet" type="text/css" href="Style/style.css">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Recent Posts</title>
         <h1>Recent Posts</h1>
-        <a href="index.jsp">Home</a><br><br>
+        <br>
+        <a href="index.jsp" class="button">Home</a>
+        <a href="search.jsp" class="button">Search Posts</a>
+        <a href="recent_posts.jsp" class="button">Recent Posts</a>
+        <a href="new_post.jsp" class="button">New Post</a>
+        <a href="performance.jsp" class="button">Performance Testing</a>
     </head>
 
     <body class="bgc">
@@ -21,9 +26,10 @@
         {
             String pLink = "view_post.jsp?pID=" + p.pID;
             String aLink = "posts_by_author.jsp?aName=" + p.aName; %>       
-            <a href="<%=pLink%>"><%=p.pTitle%></a><br>
-            By <a href="<%=aLink%>"><%=p.aName%></a> on <%=p.pDate%><br><br>
-
+            <div class="post">
+                <a href="<%=pLink%>"><%=p.pTitle%></a><br>
+                By <a href="<%=aLink%>"><%=p.aName%></a> on <%=p.pDate%>
+            </div>
         <%}%>
     </body>
 </html>
