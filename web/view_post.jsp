@@ -1,3 +1,5 @@
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.util.Date"%>
 <%@page import="DataObjects.Comment"%>
 <%@page import="java.util.List"%>
 <%@page import="DataObjects.Post"%>
@@ -26,8 +28,10 @@
     </head>
     <body class="bgc">    
         <div class="post">
+            <%Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").parse(post.pDate);
+            String formattedDate = new SimpleDateFormat("MMMM dd, yyyy").format(date);%>
             By: <a href="posts_by_author.jsp?aName=<%=post.aName%>"><%=post.aName%></a><br />
-            On: <%=post.pDate%><br /><br />
+            On: <%=formattedDate%><br /><br />
             <%=post.pText%><br /><br />
 
             Tags: <%for (String tag : post.tags){%><%=tag%> <%}%><br /><br />

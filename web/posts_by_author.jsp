@@ -1,3 +1,5 @@
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.util.Date"%>
 <%@page import="java.util.List"%>
 <%@page import="DataObjects.Post"%>
 <%@page import="DAL.DAL"%>
@@ -28,10 +30,12 @@
         <% for (Post p : posts)
         {
             String pLink = "view_post.jsp?pID=" + p.pID;
-            String aLink = "posts_by_author.jsp?aName=" + p.aName; %>
+            String aLink = "posts_by_author.jsp?aName=" + p.aName; 
+            Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").parse(p.pDate);
+            String formattedDate = new SimpleDateFormat("MMMM dd, yyyy").format(date);%>
             <div class="post">
                 <a href="<%=pLink%>"><%=p.pTitle%></a><br>
-                By <a href="<%=aLink%>"><%=p.aName%></a> on <%=p.pDate%>
+                By <a href="<%=aLink%>"><%=p.aName%></a> on <%=formattedDate%>
             </div>
         <%}%>
     </body>

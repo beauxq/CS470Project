@@ -1,14 +1,16 @@
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.util.Date"%>
 <%@page import="java.util.List"%>
 <%@page import="DataObjects.Post"%>
 <%@page import="DAL.DAL"%>
 
 <% DAL dal = DAL.GetDAL(); %>
 <% String title = request.getParameter("title") ; %>
-<% String content = request.getParameter("content") ; %>
 <% String tags = request.getParameter("tags") ; %>
+<% String content = request.getParameter("content") ; %>
 <% String author = request.getParameter("author") ; %>
 <% String searchTerm = request.getParameter("search") ; %>
-<% List<Post> posts = dal.Search(title, content, tags, author, searchTerm); %>
+<% List<Post> posts = dal.Search(title, tags, content, author, searchTerm); %>
 <% String numResults = posts.size() + (posts.size() == 1 ? " result" : " results");%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -32,10 +34,12 @@
         <% for (Post p : posts)
         {
             String pLink = "view_post.jsp?pID=" + p.pID;
-            String aLink = "posts_by_author.jsp?aName=" + p.aName; %>
+            String aLink = "posts_by_author.jsp?aName=" + p.aName; 
+            Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").parse(p.pDate);
+            String formattedDate = new SimpleDateFormat("MMMM dd, yyyy").format(date);%>
             <div class="post">
                 <a href="<%=pLink%>"><%=p.pTitle%></a><br>
-                By <a href="<%=aLink%>"><%=p.aName%></a> on <%=p.pDate%>
+                By <a href="<%=aLink%>"><%=p.aName%></a> on <%=formattedDate%>
             </div>
         <%}%>
     </body>
