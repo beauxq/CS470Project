@@ -144,10 +144,10 @@ public class MongoConnection implements IConnection
         
         if (byAuthor != null)
         {
-            DBObject clause1 = new BasicDBObject("pTitle", "/"+searchTerm+"/");  
-            DBObject clause2 = new BasicDBObject("pText", "/"+searchTerm+"/"); 
-            DBObject clause3 = new BasicDBObject("tText", "/"+searchTerm+"/");  
-            DBObject clause4 = new BasicDBObject("aName", "/"+searchTerm+"/");
+            DBObject clause1 = new BasicDBObject("pTitle", java.util.regex.Pattern.compile(searchTerm));  
+            DBObject clause2 = new BasicDBObject("pText", java.util.regex.Pattern.compile(searchTerm)); 
+            DBObject clause3 = new BasicDBObject("tText", java.util.regex.Pattern.compile(searchTerm));  
+            DBObject clause4 = new BasicDBObject("aName", java.util.regex.Pattern.compile(searchTerm));
             BasicDBList or = new BasicDBList();
             or.add(clause1);
             or.add(clause2);
@@ -157,9 +157,9 @@ public class MongoConnection implements IConnection
         }
         else if (byContent != null)
         {
-            DBObject clause1 = new BasicDBObject("pTitle", "/"+searchTerm+"/");  
-            DBObject clause2 = new BasicDBObject("pText", "/"+searchTerm+"/"); 
-            DBObject clause3 = new BasicDBObject("tText", "/"+searchTerm+"/");  
+            DBObject clause1 = new BasicDBObject("pTitle", java.util.regex.Pattern.compile(searchTerm));  
+            DBObject clause2 = new BasicDBObject("pText", java.util.regex.Pattern.compile(searchTerm)); 
+            DBObject clause3 = new BasicDBObject("tText", java.util.regex.Pattern.compile(searchTerm));  
            
             BasicDBList or = new BasicDBList();
             or.add(clause1);
@@ -170,8 +170,8 @@ public class MongoConnection implements IConnection
         }
         else if (byTags != null)
         {
-            DBObject clause1 = new BasicDBObject("pTitle", "/"+searchTerm+"/");  
-            DBObject clause2 = new BasicDBObject("tText", "/"+searchTerm+"/"); 
+            DBObject clause1 = new BasicDBObject("pTitle", java.util.regex.Pattern.compile(searchTerm));  
+            DBObject clause2 = new BasicDBObject("tText", java.util.regex.Pattern.compile(searchTerm)); 
             
             BasicDBList or = new BasicDBList();
             or.add(clause1);
@@ -181,7 +181,7 @@ public class MongoConnection implements IConnection
         }
         else
         {
-            DBObject clause1 = new BasicDBObject("pTitle", "/"+searchTerm+"/");  
+            DBObject clause1 = new BasicDBObject("pTitle", java.util.regex.Pattern.compile(searchTerm));  
             
             BasicDBList or = new BasicDBList();
             or.add(clause1);
@@ -241,6 +241,7 @@ public class MongoConnection implements IConnection
         post.aName = (String) cursor.curr().get("aName");
         post.pDate = (String) cursor.curr().get("pDate");
         post.pText = (String) cursor.curr().get("pText");
+        
         //post.tags = (String) cursor.one().get("pTags");
         
         return post;
