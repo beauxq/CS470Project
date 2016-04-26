@@ -26,7 +26,7 @@
     font-family: sans-serif;
     display: compact;
     font-size: 12px;
-    margin: 2px 4px;
+    margin: 2px 0px;
     border-radius: 6px;
     cursor: pointer;
 }
@@ -43,12 +43,47 @@ h1{
     width: 770px;
 }
 
+h2{
+    color: steelblue;
+    padding: 7px 7px;
+    margin: 10px 4px 10px;
+    width: 790px;
+}
+
 .post{
     background-color: aliceblue;
     padding: 7px 7px;
-    //font-family: sans-serif;
-    //display: inline-block;
     margin: 10px 4px 10px;
     border-radius: 6px;
+    width: 790px;
+}
+
+.post table{
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.post th{
+    height: 35px;
+    background-color: steelblue;
+    color: white;
+    font-weight: bold;
+}
+
+.post tr:hover{
+    background-color: lightyellow;
+}
+
+.post table th, td{
+    border: 1px solid black;
+}
+
+.info{
+    background-color: lightyellow;
+    padding: 7px 7px;
+    font-family: sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    margin: 10px 4px 10px;
     width: 790px;
 }

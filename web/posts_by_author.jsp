@@ -25,8 +25,9 @@
         <a href="performance.jsp" class="button">Performance Testing</a>
     </head>
     <body class="bgc">
-        <br>
-        <i><%=numPosts%> by <%=aName%></i><br /><br />
+        <div class="info">
+            <%=numPosts%> by <i><%=aName%></i>
+        </div>
         <% for (Post p : posts)
         {
             String pLink = "view_post.jsp?pID=" + p.pID;

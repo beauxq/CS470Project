@@ -100,7 +100,7 @@ public class SQLConnection implements IConnection
         return comments;
     }
     
-    public List<Post> GetRecentPosts()
+    public List<Post> GetRecentPosts(int count)
     {
         List<Post> posts = new ArrayList();
         try
@@ -110,7 +110,7 @@ public class SQLConnection implements IConnection
                     + "FROM (posts "
                     + "JOIN authors ON posts.aID = authors.aID) "
                     + "ORDER BY pDate DESC "
-                    + "LIMIT 20";
+                    + "LIMIT " + count;
             posts = getPostList(sqlCmd);
         }
         catch (SQLException ex)
@@ -200,11 +200,6 @@ public class SQLConnection implements IConnection
     
     public void AddPosts(List<Post> posts)
     {
-        while (posts.size() > 350)
-        {
-            AddPosts(posts.subList(0, 350));
-            posts = posts.subList(350, posts.size());
-        }
         try
         {
             int nextPID = nextID("pid", "posts");

@@ -15,14 +15,16 @@
     </head>
 
     <body class="bgc">
-        <form action="search_results.jsp">
-            <input type="text" name="search">
-            <input type="checkbox" name="title" id="title" onclick="titleClick()">Title  
-            <input type="checkbox" name="tags" id="tags" onclick="tagsClick()" disabled>Tags  
-            <input type="checkbox" name="content" id="content" onclick="contentClick()" disabled>Content  
-            <input type="checkbox" name="author" id="author" disabled>Authors
-            <input type="submit" id="searchbutton" value="Search" disabled>
-        </form>
+        <div class="info">
+            <form action="search_results.jsp">
+                <input type="text" name="search">
+                <input type="checkbox" name="title" id="title" onclick="titleClick()">Title  
+                <input type="checkbox" name="tags" id="tags" onclick="tagsClick()" disabled>Tags  
+                <input type="checkbox" name="content" id="content" onclick="contentClick()" disabled>Content  
+                <input type="checkbox" name="author" id="author" disabled>Authors
+                <input type="submit" id="searchbutton" value="Search" disabled>
+            </form>
+        </div>
     </body>
     
     <script>

@@ -6,7 +6,7 @@ import java.util.List;
 
 public class DAL
 {
-    private static Boolean usingSQL = true;
+    private static Boolean usingSQL = false;
     private static IConnection connection;
     private static DAL singleton = null;
 
@@ -56,9 +56,9 @@ public class DAL
         return connection.GetComments(pID);
     }
     
-    public List<Post> GetRecentPosts()
+    public List<Post> GetRecentPosts(int count)
     {
-        return connection.GetRecentPosts();
+        return connection.GetRecentPosts(count);
     }
     
     public List<Post> GetPostsByAuthor(String aName)
@@ -79,6 +79,12 @@ public class DAL
     
     public void AddPosts(List<Post> posts)
     {
+        //limit batch size to 350 to avoid oversized packets
+        while (posts.size() > 350)
+        {
+            AddPosts(posts.subList(0, 350));
+            posts = posts.subList(350, posts.size());
+        }
         connection.AddPosts(posts);
     }
     

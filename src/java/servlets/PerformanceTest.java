@@ -45,8 +45,9 @@ public class PerformanceTest extends HttpServlet
             
             results += "Performance Results for " + db + ":<br>";
             results += "<table>";
-            results += "<tr><td>NumPosts</td><td>title</td><td>titletags</td><td>titletagscontent</td>"
-                    + "<td>titletagscontentauthor</td></tr>";
+            results += "<tr><th>Number<br>Of Posts</th><th>Title</th>"
+                    + "<th>Title<br>Tags</th><th>Title<br>Tags<br>Content</th>"
+                    + "<th>Title<br>Tags<br>Content<br>Author</th></tr>";
 
             System.out.println("Clearing " + db + " database...");
             dal.EmptyDatabase();

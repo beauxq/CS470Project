@@ -16,11 +16,17 @@
         <a href="performance.jsp" class="button">Performance Testing</a>
     </head>
     <body class="bgc">
-        <form method="get" action="performance_test">
-            <input type="radio" name="db" value="MySQL")> MySQL
-            <input type="radio" name="db" value="MongoDB"> MongoDB<br>
-            <input type="submit" value="Run" class="button_small"><br><br>
-            <%if (results != null){%> <%=results%> <%}%>
-        </form>
+        <div class="info">
+            <form method="get" action="performance_test">
+                <input type="radio" name="db" value="MySQL")> MySQL
+                <input type="radio" name="db" value="MongoDB"> MongoDB
+                <input type="submit" value="Run" class="button_small">
+            </form>
+        </div>
+        <%if (results != null){%>
+            <div class="post">
+                <%=results%> 
+            </div>
+        <%}%>
     </body>
 </html>

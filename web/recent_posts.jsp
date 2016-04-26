@@ -6,7 +6,7 @@
 <%@page import="DAL.DAL"%>
 
 <% DAL dal = DAL.GetDAL(); %>
-<% List<Post> posts = dal.GetRecentPosts(); %>
+<% List<Post> posts = dal.GetRecentPosts(10); %>
     
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>

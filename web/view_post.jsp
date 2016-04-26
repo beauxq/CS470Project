@@ -28,27 +28,39 @@
     </head>
     <body class="bgc">    
         <div class="post">
+            <%=post.pText%>
+        </div>
+        <div class="info">
             <%Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").parse(post.pDate);
             String formattedDate = new SimpleDateFormat("MMMM dd, yyyy").format(date);%>
-            By: <a href="posts_by_author.jsp?aName=<%=post.aName%>"><%=post.aName%></a><br />
-            On: <%=formattedDate%><br /><br />
-            <%=post.pText%><br /><br />
-
-            Tags: <%for (String tag : post.tags){%><%=tag%> <%}%><br /><br />
+            By <a href="posts_by_author.jsp?aName=<%=post.aName%>"><%=post.aName%></a>
+            (<i><%=formattedDate%></i>)
         </div>
-        <%=numComments%> on <i><%=post.pTitle%></i><br />
+        <div class="info">
+            <b>Tags:</b> <%for (String tag : post.tags){%><%=tag%> <%}%>
+        </div>
+        <h2>
+            <%=numComments%> on <i><%=post.pTitle%></i>
+        </h2>
         <%for (Comment c : comments){%>
-            <br /><%=c.cText%><br />
-            By <%=c.aName%> on <%=c.cDate%><br />
-        <%}%><br/>
-            
-        <form method="get" action="add_comment">
-            <input type="hidden" name="pID" value="<%=post.pID%>">
-            Your comment:<br>
-            <input type="text" name="cText" required><br>
-            Your name:<br>
-            <input type="text" name="aName" required><br>
-            <input type="submit" value="Add Comment">
-        </form>       
+            <div class="post">
+                <%Date cDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").parse(c.cDate);
+                String formattedCDate = new SimpleDateFormat("MMMM dd, yyyy").format(cDate);%>
+                <b><%=c.aName%>:</b> <i>(<%=formattedCDate%>)</i><br />
+                <%=c.cText%>
+                
+            </div>
+        <%}%>
+        
+        <div class="info">
+            <form method="get" action="add_comment">
+                <input type="hidden" name="pID" value="<%=post.pID%>">
+                Your name:<br>
+                <input type="text" name="aName" required><br>
+                Your comment:<br>
+                <textarea name="cText" rows="10" cols="109" required></textarea><br>
+                <input type="submit" value="Add Comment">
+            </form>  
+        </div>
     </body>
 </html>

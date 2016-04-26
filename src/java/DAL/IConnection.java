@@ -12,7 +12,7 @@ public interface IConnection
     
     public List<Comment> GetComments(String pID);
     
-    public List<Post> GetRecentPosts();
+    public List<Post> GetRecentPosts(int count);
     
     public List<Post> GetPostsByAuthor(String aName);
     
