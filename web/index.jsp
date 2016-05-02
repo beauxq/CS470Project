@@ -1,3 +1,8 @@
+<%@page import="DAL.DAL"%>
+
+<% String usingSQL = (DAL.UsingSQLDatabase() ? "checked" : ""); %>
+<% String usingMongo = (DAL.UsingSQLDatabase() ? "" : "checked"); %>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -15,5 +20,13 @@
     </head>
 
     <body class="bgc">
+        <div class="info">
+            Change database:<br>
+            <form method="get" action="choose_dal">
+                <input type="radio" name="db" value="MySQL" <%=usingSQL%> > MySQL
+                <input type="radio" name="db" value="MongoDB" <%=usingMongo%> > MongoDB
+                <input type="submit" value="Update" class="button_small">
+            </form>
+        </div>
     </body>
 </html>

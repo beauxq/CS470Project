@@ -12,16 +12,19 @@ import java.util.List;
 
 public class SQLConnection implements IConnection
 {
-    private static String ipAddress = "136.63.18.225";
-    private static String port = "3306";
-    private static String databaseName = "470blog";
-    private static String userID = "cs470";
-    private static String password = "cs470lnw";
-    private static String connectionString =
+    private static final String ipAddress = "136.63.18.225";
+    private static final String port = "3306";
+    private static final String databaseName = "470blog";
+    private static final String userID = "cs470";
+    private static final String password = "cs470lnw";
+    private static final String connectionString =
             "jdbc:mysql://" + ipAddress + ":" + port + "/" + databaseName;
+    private static final int maxPosts = 1000000;
 
     private static Statement stmt;
     private static Connection con;
+    
+    private static SQLConnection singleton = null;
 
     SQLConnection()
     {
@@ -36,13 +39,23 @@ public class SQLConnection implements IConnection
 
             System.out.println("Connected to mySQL");
         }
-        catch (Exception ex)
+        catch (ClassNotFoundException | SQLException ex)
         {
             System.out.println("Failure connecting to mySQL");
             System.out.println(ex.toString());
         }
     }
+    
+    public static SQLConnection GetConnection()
+    {
+        if (singleton == null)
+        {
+            singleton = new SQLConnection();
+        }
+        return singleton;
+    }
 
+    @Override
     public void Close()
     {
         try
@@ -50,6 +63,7 @@ public class SQLConnection implements IConnection
             System.out.println("Closing mySQL connection...");
             stmt.close();
             con.close();
+            singleton = null;
             System.out.println("Closed mySQL connection");
         }
         catch (Exception ex)
@@ -59,6 +73,7 @@ public class SQLConnection implements IConnection
         }
     }
     
+    @Override
     public Post GetPost(String pID)
     {
         Post post = new Post();
@@ -80,6 +95,7 @@ public class SQLConnection implements IConnection
         return post;
     }
     
+    @Override
     public List<Comment> GetComments(String pID)
     {
         List<Comment> comments = new ArrayList<>();
@@ -100,6 +116,7 @@ public class SQLConnection implements IConnection
         return comments;
     }
     
+    @Override
     public List<Post> GetRecentPosts(int count)
     {
         List<Post> posts = new ArrayList();
@@ -120,6 +137,7 @@ public class SQLConnection implements IConnection
         return posts;
     }
     
+    @Override
     public List<Post> GetPostsByAuthor(String aName)
     {
         List<Post> posts = new ArrayList();
@@ -143,27 +161,35 @@ public class SQLConnection implements IConnection
         return posts;
     }
     
+    @Override
     public List<Post> Search(String byTitle, String byTags, 
             String byContent, String byAuthor, String searchTerm)
     {
+        return Search(byTitle, byTags, byContent, byAuthor, searchTerm, maxPosts);
+    }
+    
+    @Override
+    public List<Post> Search(String byTitle, String byTags, 
+            String byContent, String byAuthor, String searchTerm, int numPosts)
+    {
         List<Post> posts = new ArrayList();
-        String sqlCmd = "";
+        String sqlCmd;
 
         if (byAuthor != null)
         {
-            sqlCmd = searchByTitleTagsContentAuthor(searchTerm);
+            sqlCmd = searchByTitleTagsContentAuthor(searchTerm, numPosts);
         }
         else if (byContent != null)
         {
-            sqlCmd = searchByTitleTagsContent(searchTerm);
+            sqlCmd = searchByTitleTagsContent(searchTerm, numPosts);
         }
         else if (byTags != null)
         {
-            sqlCmd = searchByTitleTags(searchTerm);
+            sqlCmd = searchByTitleTags(searchTerm, numPosts);
         }
         else
         {
-            sqlCmd = searchByTitle(searchTerm);
+            sqlCmd = searchByTitle(searchTerm, numPosts);
         }
         try
         {
@@ -176,6 +202,7 @@ public class SQLConnection implements IConnection
         return posts;
     }
     
+    @Override
     public void AddPost(Post post)
     {
         try
@@ -198,6 +225,7 @@ public class SQLConnection implements IConnection
         }
     }
     
+    @Override
     public void AddPosts(List<Post> posts)
     {
         try
@@ -233,9 +261,10 @@ public class SQLConnection implements IConnection
         catch (SQLException ex)
         {
             System.out.println(ex.getMessage());
-        }
+       }
     }
     
+    @Override
     public void AddComment(String pID, Comment comment) 
     {
         try
@@ -252,6 +281,7 @@ public class SQLConnection implements IConnection
         }
     }
     
+    @Override
     public void EmptyDatabase()
     {
         try
@@ -296,8 +326,7 @@ public class SQLConnection implements IConnection
     {
         List<Comment> comments = new ArrayList<>();
         ResultSet rs = stmt.executeQuery(sqlCmd);
-        boolean more = rs.next();
-        while (more)
+        while (rs.next())
         {
             Comment c = new Comment();
             c.cID = rs.getString(1);
@@ -305,7 +334,6 @@ public class SQLConnection implements IConnection
             c.cDate = rs.getString(3);
             c.cText = rs.getString(4);
             comments.add(c);
-            more = rs.next();
         }
         return comments;
     }
@@ -314,8 +342,7 @@ public class SQLConnection implements IConnection
     {
         List<Post> posts = new ArrayList<>();
         ResultSet rs = stmt.executeQuery(sqlCmd);
-        boolean more = rs.next();
-        while (more)
+        while (rs.next())
         {
             Post p = new Post();
             p.pID = rs.getString(1);
@@ -323,7 +350,6 @@ public class SQLConnection implements IConnection
             p.aName = rs.getString(3);
             p.pDate = rs.getString(4);
             posts.add(p);
-            more = rs.next();
         }
         return posts;
     }
@@ -342,7 +368,7 @@ public class SQLConnection implements IConnection
     
     private static int getAuthorID(String aName) throws SQLException
     {
-        int aID = -1;
+        int aID;
         ResultSet rs = stmt.executeQuery
                 ("Select aID from authors where aName = '" + aName + "'");
         if (rs.next()) // author already in db
@@ -360,8 +386,9 @@ public class SQLConnection implements IConnection
     
     private static int getTagID(String tText) throws SQLException
     {
-        int tID = -1;
-        ResultSet rs = stmt.executeQuery("Select tID from tags where tText = '" + tText + "'");
+        int tID;
+        ResultSet rs = stmt.executeQuery(
+                "Select tID from tags where tText = '" + tText + "'");
         if (rs.next()) // tag already in db
         {
             tID = rs.getInt(1);
@@ -369,18 +396,22 @@ public class SQLConnection implements IConnection
         else // add tag to db
         {
             tID = nextID("tid", "tags");
-            stmt.execute("Insert into tags values (" + tID + ", '" + tText + "')");
+            stmt.execute(
+                    "Insert into tags values (" + tID + ", '" + tText + "')");
         }
         return tID;
     }
     
-    private static String searchByTitleTagsContentAuthor(String searchTerm)
+    private static String searchByTitleTagsContentAuthor(String searchTerm, 
+            int numPosts)
     {
-        return "SELECT DISTINCT posts.pID, pTitle, aName, pDate FROM " +
-            "(posts " +
-            "JOIN authors ON posts.aID = authors.aID " +
-            "JOIN posttags ON posts.pID = postTags.pID " +
-            "JOIN tags ON postTags.tID = tags.tID) " +
+        return "SELECT DISTINCT pID, pTitle, aName, pDate FROM " +
+                "(SELECT posts.pID, pTitle, aName, pDate, pText, tText FROM " +
+                    "(posts " +
+                    "JOIN authors ON posts.aID = authors.aID " +
+                    "JOIN posttags ON posts.pID = postTags.pID " +
+                    "JOIN tags ON postTags.tID = tags.tID) " +
+                "LIMIT " + numPosts + ") AS subtable " +
             "WHERE pTitle LIKE '%" + searchTerm + "%' " +
             "OR pText LIKE '%" + searchTerm + "%' " +
             "OR tText LIKE '%" + searchTerm + "%' " +
@@ -388,36 +419,43 @@ public class SQLConnection implements IConnection
             "ORDER BY pDate DESC";
     }
     
-    private static String searchByTitleTagsContent(String searchTerm)
+    private static String searchByTitleTagsContent(String searchTerm, 
+            int numPosts)
     {
-        return "SELECT DISTINCT posts.pID, pTitle, aName, pDate FROM " +
-            "(posts " +
-            "JOIN authors ON posts.aID = authors.aID " +
-            "JOIN posttags ON posts.pID = postTags.pID " +
-            "JOIN tags ON postTags.tID = tags.tID) " +
+        return "SELECT DISTINCT pID, pTitle, aName, pDate FROM " +
+                "(SELECT posts.pID, pTitle, aName, pDate, pText, tText FROM " +
+                    "(posts " +
+                    "JOIN authors ON posts.aID = authors.aID " +
+                    "JOIN posttags ON posts.pID = postTags.pID " +
+                    "JOIN tags ON postTags.tID = tags.tID) " +
+                "LIMIT " + numPosts + ") AS subtable " +
             "WHERE pTitle LIKE '%" + searchTerm + "%' " +
             "OR pText LIKE '%" + searchTerm + "%' " +
             "OR tText LIKE '%" + searchTerm + "%' " +
             "ORDER BY pDate DESC";
     }
     
-    private static String searchByTitleTags(String searchTerm)
+    private static String searchByTitleTags(String searchTerm, int numPosts)
     {
-        return "SELECT DISTINCT posts.pID, pTitle, aName, pDate FROM " +
-            "(posts " +
-            "JOIN authors ON posts.aID = authors.aID " +
-            "JOIN posttags ON posts.pID = postTags.pID " +
-            "JOIN tags ON postTags.tID = tags.tID) " +
+        return "SELECT DISTINCT pID, pTitle, aName, pDate FROM " +
+                "(SELECT posts.pID, pTitle, aName, pDate, tText FROM " +
+                    "(posts " +
+                    "JOIN authors ON posts.aID = authors.aID " +
+                    "JOIN posttags ON posts.pID = postTags.pID " +
+                    "JOIN tags ON postTags.tID = tags.tID) " +
+                "LIMIT " + numPosts + ") AS subtable " +
             "WHERE pTitle LIKE '%" + searchTerm + "%' " +
             "OR tText LIKE '%" + searchTerm + "%' " +
             "ORDER BY pDate DESC";
     }
     
-    private static String searchByTitle(String searchTerm)
+    private static String searchByTitle(String searchTerm, int numPosts)
     {
         return "SELECT DISTINCT pID, pTitle, aName, pDate FROM " +
-            "(posts " +
-            "JOIN authors ON posts.aID = authors.aID) " +
+                "(SELECT pID, pTitle, aName, pDate FROM " +
+                    "(posts " +
+                    "JOIN authors ON posts.aID = authors.aID) " +
+                "LIMIT " + numPosts + ") AS subtable " +
             "WHERE pTitle LIKE '%" + searchTerm + "%' " +
             "ORDER BY pDate DESC";
     }

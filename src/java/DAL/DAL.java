@@ -6,19 +6,20 @@ import java.util.List;
 
 public class DAL
 {
-    private static Boolean usingSQL = false;
+    private static Boolean usingSQL = true;
+    private static final int maxPosts = 1000000;
     private static IConnection connection;
     private static DAL singleton = null;
-
+    
     private DAL()
     {
         if (usingSQL)
         {
-            connection = new SQLConnection();
+            connection = SQLConnection.GetConnection();
         }
         else
         {
-            connection = new MongoConnection();
+            connection = MongoConnection.GetConnection();
         }
     }
 
@@ -33,17 +34,29 @@ public class DAL
     
     public static DAL GetDAL(Boolean useSQL)
     {
-        if (singleton != null && usingSQL != useSQL)
+        SetDefaultDatabase(useSQL);
+        return GetDAL();
+    }
+    
+    public static Boolean UsingSQLDatabase()
+    {
+        return usingSQL;
+    }
+    
+    public static void SetDefaultDatabase(Boolean useSQL)
+    {
+        if (singleton != null && !usingSQL.equals(useSQL))
         {
             connection.Close();
+            singleton = null;
         }
-        usingSQL = useSQL;
-        return GetDAL();
+        usingSQL = useSQL;  
     }
 
     public void CloseConnection()
     {
         connection.Close();
+        singleton = null;
     }
     
     public Post GetPost(String pID)
@@ -69,7 +82,15 @@ public class DAL
     public List<Post> Search(String byTitle, String byTags, 
             String byContent, String byAuthor, String searchTerm)
     {
-        return connection.Search(byTitle, byTags, byContent, byAuthor, searchTerm);
+        return connection.Search(byTitle, 
+                byTags, byContent, byAuthor, searchTerm, maxPosts);
+    }
+    
+    public List<Post> Search(String byTitle, String byTags, 
+            String byContent, String byAuthor, String searchTerm, int numPosts)
+    {
+        return connection.Search(byTitle, 
+                byTags, byContent, byAuthor, searchTerm, numPosts);
     }
     
     public void AddPost(Post post)
@@ -79,11 +100,11 @@ public class DAL
     
     public void AddPosts(List<Post> posts)
     {
-        //limit batch size to 350 to avoid oversized packets
-        while (posts.size() > 350)
+        //limit batch size to 1000 to avoid oversized packets
+        while (posts.size() > 1000)
         {
-            AddPosts(posts.subList(0, 350));
-            posts = posts.subList(350, posts.size());
+            AddPosts(posts.subList(0, 1000));
+            posts = posts.subList(1000, posts.size());
         }
         connection.AddPosts(posts);
     }

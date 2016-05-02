@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 
 public class AddComment extends HttpServlet
 {
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException
+    protected void processRequest(HttpServletRequest request, 
+            HttpServletResponse response) throws ServletException, IOException
     {
         DAL dal = DAL.GetDAL();
         Comment comment = new Comment();
@@ -25,6 +25,7 @@ public class AddComment extends HttpServlet
         response.sendRedirect("view_post.jsp?pID=" + request.getParameter("pID"));
     }
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException
     {

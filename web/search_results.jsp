@@ -1,3 +1,4 @@
+<%@page import="java.text.DecimalFormat"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.Date"%>
 <%@page import="java.util.List"%>
@@ -10,7 +11,11 @@
 <% String content = request.getParameter("content") ; %>
 <% String author = request.getParameter("author") ; %>
 <% String searchTerm = request.getParameter("search") ; %>
+<% long start = System.nanoTime();%>
 <% List<Post> posts = dal.Search(title, tags, content, author, searchTerm); %>
+<% long stop = System.nanoTime(); %>
+<% double time = (double)(stop - start) / 1000000000.0;%>
+<% String timeResults = new DecimalFormat("0.000").format(time); %>
 <% String numResults = posts.size() + (posts.size() == 1 ? " result" : " results");%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -30,7 +35,7 @@
     </head>
     <body class="bgc">
         <div class="info">
-            <%=numResults%> for <i><%=searchTerm%></i>
+            <%=numResults%> for <i><%=searchTerm%></i> (<%=timeResults%> seconds)
         </div>
         <% for (Post p : posts)
         {

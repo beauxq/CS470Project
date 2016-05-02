@@ -12,6 +12,10 @@
         <servlet-name>PerformanceTest</servlet-name>
         <servlet-class>servlets.PerformanceTest</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ChooseDal</servlet-name>
+        <servlet-class>servlets.ChooseDAL</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>AddComment</servlet-name>
         <url-pattern>/add_comment</url-pattern>
@@ -24,6 +28,10 @@
         <servlet-name>PerformanceTest</servlet-name>
         <url-pattern>/performance_test</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChooseDal</servlet-name>
+        <url-pattern>/choose_dal</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
@@ -32,10 +40,4 @@
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
-    <resource-ref>
-        <res-ref-name>jdbc/blogData</res-ref-name>
-        <res-type>javax.sql.ConnectionPoolDataSource</res-type>
-        <res-auth>Container</res-auth>
-        <res-sharing-scope>Shareable</res-sharing-scope>
-    </resource-ref>
 </web-app>

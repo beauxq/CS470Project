@@ -14,8 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 
 public class AddPost extends HttpServlet
 {
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException
+    protected void processRequest(HttpServletRequest request, 
+            HttpServletResponse response) throws ServletException, IOException
     {
         DAL dal = DAL.GetDAL();
         Post post = new Post();

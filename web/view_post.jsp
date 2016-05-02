@@ -48,10 +48,8 @@
                 String formattedCDate = new SimpleDateFormat("MMMM dd, yyyy").format(cDate);%>
                 <b><%=c.aName%>:</b> <i>(<%=formattedCDate%>)</i><br />
                 <%=c.cText%>
-                
             </div>
         <%}%>
-        
         <div class="info">
             <form method="get" action="add_comment">
                 <input type="hidden" name="pID" value="<%=post.pID%>">

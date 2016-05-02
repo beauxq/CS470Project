@@ -45,8 +45,6 @@
             searchbutton.disabled = tags.disabled;
         }
 
-
-        
         function tagsClick()
         {
             if (! tags.checked)

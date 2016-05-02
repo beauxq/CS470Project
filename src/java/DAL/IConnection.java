@@ -19,6 +19,9 @@ public interface IConnection
     public List<Post> Search(String byTitle, String byTags, 
             String byContent, String byAuthor, String searchTerm);
     
+    public List<Post> Search(String byTitle, String byTags, 
+        String byContent, String byAuthor, String searchTerm, int numPosts);
+    
     public void AddPost(Post post);
     
     public void AddPosts(List<Post> posts);

@@ -1,4 +1,7 @@
+<%@page import="DAL.DAL"%>
 <%String results = request.getParameter("results"); %>
+<% String usingSQL = (DAL.UsingSQLDatabase() ? "checked" : ""); %>
+<% String usingMongo = (DAL.UsingSQLDatabase() ? "" : "checked"); %>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -17,16 +20,15 @@
     </head>
     <body class="bgc">
         <div class="info">
+            Run performance tests:<br>
             <form method="get" action="performance_test">
-                <input type="radio" name="db" value="MySQL")> MySQL
-                <input type="radio" name="db" value="MongoDB"> MongoDB
+                <input type="radio" name="db" value="MySQL" <%=usingSQL%> > MySQL
+                <input type="radio" name="db" value="MongoDB" <%=usingMongo%> > MongoDB
                 <input type="submit" value="Run" class="button_small">
             </form>
         </div>
         <%if (results != null){%>
-            <div class="post">
-                <%=results%> 
-            </div>
+            <%=results%> 
         <%}%>
     </body>
 </html>
