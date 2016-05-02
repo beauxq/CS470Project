@@ -19,12 +19,13 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title><%=post.pTitle%></title>
         <h1><%=post.pTitle%></h1>
-        <br>
-        <a href="index.jsp" class="button">Home</a>
-        <a href="search.jsp" class="button">Search Posts</a>
-        <a href="recent_posts.jsp" class="button">Recent Posts</a>
-        <a href="new_post.jsp" class="button">New Post</a>
-        <a href="performance.jsp" class="button">Performance Testing</a>
+        <div class="button_container">
+            <a href="index.jsp" class="button">Home</a>
+            <a href="search.jsp" class="button">Search Posts</a>
+            <a href="recent_posts.jsp" class="button">Recent Posts</a>
+            <a href="new_post.jsp" class="button">New Post</a>
+            <a href="performance.jsp" class="button">Performance Testing</a>
+        </div>
     </head>
     <body class="bgc">    
         <div class="post">
@@ -53,11 +54,11 @@
         <div class="info">
             <form method="get" action="add_comment">
                 <input type="hidden" name="pID" value="<%=post.pID%>">
+                Add a comment:<br>
+                <textarea name="cText" rows="10" cols="109" required></textarea><br><br>
                 Your name:<br>
-                <input type="text" name="aName" required><br>
-                Your comment:<br>
-                <textarea name="cText" rows="10" cols="109" required></textarea><br>
-                <input type="submit" value="Add Comment">
+                <input type="text" name="aName" required>
+                <input type="submit" value="Add Comment" class="button_small">
             </form>  
         </div>
     </body>

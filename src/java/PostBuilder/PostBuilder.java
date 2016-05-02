@@ -1,4 +1,4 @@
-package PerformanceTesting;
+package PostBuilder;
 
 import DataObjects.Post;
 import java.io.File;

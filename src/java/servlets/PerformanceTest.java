@@ -2,7 +2,7 @@ package servlets;
 
 import DAL.DAL;
 import DataObjects.Post;
-import PerformanceTesting.PostBuilder;
+import PostBuilder.PostBuilder;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
