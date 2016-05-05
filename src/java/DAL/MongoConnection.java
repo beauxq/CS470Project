@@ -21,7 +21,7 @@ import org.bson.types.ObjectId;
 
 public class MongoConnection implements IConnection
 {
-    private static final String ipAddress = "136.63.18.225";
+    private static final String ipAddress = "localhost";
     private static final int port = 27444;
     private static final String userID = "cs470";
     private static final String password = "cs470lnw";
